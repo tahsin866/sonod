@@ -18,9 +18,15 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/Fazilat.Fazilat', function () {
+Route::get('/Fazilat.Fazilat' , function () {
     return Inertia::render('Fazilat/Fazilat');
 })->middleware(['auth', 'verified'])->name('Fazilat');
+
+// routes/web.php
+
+
+
+
 
 
 
