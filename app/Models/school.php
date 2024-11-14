@@ -2,20 +2,15 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Laravel\Prompts\Concerns\Fallback;
 
-class school extends Model
+class School extends Model
 {
-  
-use HasFactory;
 
-protected $fillable = ['School_name','student_id'];
-
-public function student(){
-
-    return $this->belongsTo(Student::class);
-}
-
+    protected $fillable = ['name', 'madrasha_id'];
+    // A school can have many students
+    public function students()
+    {
+        return $this->belongsTo(Student::class, 'madrasha_id');  // 'madrasha_id' in students table is the foreign key
+    }
 }

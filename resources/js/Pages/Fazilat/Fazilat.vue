@@ -8,7 +8,7 @@
           ফযিলত ছাত্রদের সনদের কার্যক্রম
         </h1>
       </template>
-  
+
       <div class="container mt-8 px-4 sm:px-6 lg:px-8">
         <!-- Search Student by Roll and Year in one row -->
         <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-6">
@@ -23,7 +23,7 @@
               class="w-full px-4 py-3 border rounded-lg dark:bg-gray-700 dark:text-gray-200 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             />
           </div>
-  
+
           <!-- Year Dropdown -->
           <div>
             <label for="year" class="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-300">Year</label>
@@ -37,7 +37,7 @@
             </select>
           </div>
         </div>
-  
+
         <!-- Search Button -->
         <div class="mb-6">
           <button
@@ -47,7 +47,7 @@
             Search Student
           </button>
         </div>
-  
+
         <!-- Student Details Display -->
         <div v-if="studentDetails.found" class="p-6 bg-white rounded-lg shadow-lg dark:bg-gray-800">
           <h2 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Student Details</h2>
@@ -56,9 +56,9 @@
             <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Roll:</strong> {{ studentDetails.roll_number }}</p>
             <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Class:</strong> {{ studentDetails.class }}</p>
             <p class="text-sm text-gray-700 dark:text-gray-300"><strong>Year:</strong> {{ studentDetails.year }}</p>
-            <p class="text-sm text-gray-700 dark:text-gray-300"><strong>School_name:</strong> {{ studentDetails.School_name }}</p>
+            <p class="text-sm text-gray-700 dark:text-gray-300"><strong>School_name:</strong> {{ studentDetails.school_name}}</p>
           </div>
-  
+
           <!-- Display Subject Table -->
           <div class="mt-6">
             <table class="min-w-full mt-4 table-auto border-collapse border border-gray-200 dark:border-gray-700 rounded-lg">
@@ -66,7 +66,6 @@
                 <tr class="bg-gray-100 dark:bg-gray-700">
                   <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-300">Subject</th>
                   <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-300">Marks</th>
-                  <th class="px-6 py-3 text-left text-sm font-medium text-gray-900 dark:text-gray-300">School_name</th>
                 </tr>
               </thead>
               <tbody>
@@ -75,12 +74,12 @@
                   <td class="px-6 py-3 text-sm text-gray-800 dark:text-gray-200">{{ subject.marks }}</td>
                   <!-- <td class="px-6 py-3 text-sm text-gray-800 dark:text-gray-200">{{ school.School_name }}</td> -->
                 </tr>
-              
+
               </tbody>
             </table>
           </div>
         </div>
-  
+
         <!-- Error message when student not found -->
         <div v-if="!studentDetails.found && studentDetails.message" class="mt-4 text-center">
           <p class="text-sm text-red-600 font-medium">{{ studentDetails.message }}</p>
@@ -88,17 +87,17 @@
       </div>
     </AuthenticatedLayout>
   </template>
-  
+
   <script setup>
   import { ref } from 'vue';
   import axios from 'axios';
   import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-  
+
   // Reactive variables
   const rollNumber = ref('');
   const year = ref('');
   const years = ref([2021, 2022, 2023, 2024]); // Dummy years for dropdown
-  
+
   const studentDetails = ref({
     found: false,
     name: '',
@@ -106,10 +105,10 @@
     class: '',
     year: '',
     subjects: [],
-    school: [],
+    school_name: [],
     message: ''
   });
-  
+
   // Search student function
   const searchStudent = async () => {
     try {
@@ -119,7 +118,7 @@
           year: year.value
         }
       });
-  
+
       if (response.data.length > 0) {
         studentDetails.value = {
           found: true,
@@ -140,7 +139,7 @@
     }
   };
   </script>
-  
+
   <style scoped>
   /* Custom Styles */
   .container {
@@ -148,41 +147,40 @@
     margin: 0 auto;
     padding: 20px;
   }
-  
+
   button {
     width: 100%;
   }
-  
+
   table {
     width: 100%;
     border-collapse: collapse;
   }
-  
+
   th,
   td {
     padding: 12px;
     text-align: left;
   }
-  
+
   th {
     background-color: #f9fafb;
   }
-  
+
   td {
     border-bottom: 1px solid #ddd;
   }
-  
+
   .dark th {
     background-color: #2d3748;
     color: #fff;
   }
-  
+
   .dark td {
     border-bottom: 1px solid #444;
   }
-  
+
   table tr:hover {
     background-color: #f1f5f9;
   }
   </style>
-  

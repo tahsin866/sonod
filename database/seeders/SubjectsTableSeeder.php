@@ -15,7 +15,7 @@ class SubjectsTableSeeder extends Seeder
                 'student_id' => 12,  // Corresponding student_id
                 'name' => 'Mathematics',
                 'marks' => 85,
-          
+
 
             ],
             [

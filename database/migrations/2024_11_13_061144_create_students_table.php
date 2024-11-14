@@ -14,6 +14,7 @@ class CreateStudentsTable extends Migration
             $table->string('roll_number')->unique();
             $table->string('class');
             $table->string('year');
+            $table->foreignId('madrasha_id')->constrained('school')->onDelete('cascade')->change();
             $table->timestamps();
         });
     }
@@ -21,5 +22,6 @@ class CreateStudentsTable extends Migration
     public function down()
     {
         Schema::dropIfExists('students');
+
     }
 }
