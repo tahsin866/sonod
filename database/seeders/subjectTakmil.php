@@ -1,16 +1,19 @@
 <?php
 
 namespace Database\Seeders;
-
-use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 
-class SubjectsTableSeeder extends Seeder
+class subjectTakmil extends Seeder
 {
-    public function run()
+    /**
+     * Run the database seeds.
+     */
+    public function run(): void
     {
-        // Insert dummy data for subjects table
-        DB::table('subjects')->insert([
+        DB::table('subject_name_takmils')->insert([
+
             [
                 'student_id' => 12,  // Corresponding student_id
                 'name' => 'Mathematics',

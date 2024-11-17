@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\StudentController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -18,6 +19,8 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+
+
 Route::get('/Fazilat.Fazilat' , function () {
     return Inertia::render('Fazilat/Fazilat');
 })->middleware(['auth', 'verified'])->name('Fazilat');
@@ -26,9 +29,9 @@ Route::get('/Fazilat.Fazilat' , function () {
 
 
 
+// Route::get('students/search', [StudentController::class, 'search']);
 
-
-
+Route::post('/student/register', [StudentController::class, 'store'])->name('student.store');
 
 
 Route::middleware('auth')->group(function () {

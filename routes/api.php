@@ -11,4 +11,4 @@ Route::get('/user', function (Request $request) {
 
 
 
-Route::get('students/search', [StudentController::class, 'search']);
+Route::post('/student', [StudentController::class, 'search']);
