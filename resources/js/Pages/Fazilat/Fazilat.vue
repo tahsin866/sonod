@@ -1,169 +1,123 @@
 <template>
+    <Head title="Fazilat" />
+
     <AuthenticatedLayout>
-        <div class="max-w-4xl mx-auto mt-10 p-5 bg-white shadow-lg rounded-lg">
-      <div class="text-center mb-8">
-        <h2 class="text-3xl font-semibold text-gray-800">Student Registration Form</h2>
-      </div>
-      <form @submit.prevent="submitForm">
-        <!-- Student Name (Bangla) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div>
-            <label for="Student_name_bn" class="block text-sm font-medium text-gray-700">Student Name (Bangla)</label>
-            <input type="text" id="Student_name_bn" v-model="form.Student_name_bn" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-          </div>
+        <div class="container mx-auto p-5" id="app">
 
-          <!-- Student Name (English) -->
-          <div>
-            <label for="Student_name_en" class="block text-sm font-medium text-gray-700">Student Name (English)</label>
-            <input type="text" id="Student_name_en" v-model="form.Student_name_en" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-          </div>
+            <div class="max-w-full mx-auto mt-10 p-5 bg-white shadow-lg rounded-lg">
+                <div class="text-center mb-8">
+                    <h2 style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="text-3xl font-semibold text-gray-800">ফযিলত ছাত্রদের সনদ কার্যক্রম</h2>
+                </div>
+                <form @submit.prevent="searchStudent">
+                    <!-- Year Selection -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="selectYear" class="block text-sm font-medium text-gray-700">বছর নির্বাচন করুন</label>
+                            <select id="selectYear" v-model="form.selectYear" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option disabled value="">বছর নির্বাচন করুন</option>
+                                <option v-for="year in selectYear" :key="year" :value="year">{{ year }}</option>
+                            </select>
+                        </div>
+
+                        <!-- Student Type Selection -->
+                        <div>
+                            <label for="selectStudentType" class="block text-sm font-medium text-gray-700">ছাত্র-ছাত্রী নির্বাচন করুন</label>
+                            <select id="selectStudentType" v-model="form.selectStudentType" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                <option disabled value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
+                                <option v-for="name in selectStudentType" :key="name" :value="name">{{ name }}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Roll Number or Registration ID Search Fields -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <!-- Roll Number Search -->
+                        <div>
+                            <label for="rollNumber" class="block text-sm font-medium text-gray-700">রোল নম্বর অনুসন্ধান করুন</label>
+                            <input
+                                id="rollNumber"
+                                v-model="form.selectRollNumber"
+                                type="text"
+                                placeholder="রোল নম্বর লিখুন"
+                                class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+
+                        <!-- Registration ID Search -->
+                        <div>
+                            <label for="registrationId" class="block text-sm font-medium text-gray-700">রেজিস্ট্রেশন আইডি অনুসন্ধান করুন</label>
+                            <input
+                                id="registrationId"
+                                v-model="form.selectRegId"
+                                type="text"
+                                placeholder="রেজিস্ট্রেশন আইডি লিখুন"
+                                class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="mt-8 text-center">
+                        <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                            Search
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Search Results (Example Section) -->
+                <div v-if="searchResults.length > 0" class="mt-8">
+                    <h3 class="text-xl font-semibold">Search Results</h3>
+                    <ul>
+                        <li v-for="result in searchResults" :key="result.id" class="p-4 border-b">
+                            <p><strong>Name:</strong> {{ result.name }}</p>
+                            <p><strong>Roll Number:</strong> {{ result.rollNumber }}</p>
+                            <p><strong>Registration ID:</strong> {{ result.registrationId }}</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
+        <main class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-8">
+                <slot />
+            </main>
 
-        <!-- Student Name (Arabic) -->
-        <div class="mt-6">
-          <label for="Student_name_ar" class="block text-sm font-medium text-gray-700">Student Name (Arabic)</label>
-          <input type="text" id="Student_name_ar" v-model="form.Student_name_ar" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-        </div>
-
-        <!-- Father's Name (Bangla) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <div>
-            <label for="stu_father_name_bn" class="block text-sm font-medium text-gray-700">Father Name (Bangla)</label>
-            <input type="text" id="stu_father_name_bn" v-model="form.stu_father_name_bn" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-          </div>
-
-          <!-- Father's Name (English) -->
-          <div>
-            <label for="stu_father_name_en" class="block text-sm font-medium text-gray-700">Father Name (English)</label>
-            <input type="text" id="stu_father_name_en" v-model="form.stu_father_name_en" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-          </div>
-        </div>
-
-        <!-- Father's Name (Arabic) -->
-        <div class="mt-6">
-          <label for="stu_father_name_ar" class="block text-sm font-medium text-gray-700">Father Name (Arabic)</label>
-          <input type="text" id="stu_father_name_ar" v-model="form.stu_father_name_ar" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-        </div>
-
-        <!-- Mother's Name (Bangla) -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <div>
-            <label for="stu_mother_name_bn" class="block text-sm font-medium text-gray-700">Mother Name (Bangla)</label>
-            <input type="text" id="stu_mother_name_bn" v-model="form.stu_mother_name_bn" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-          </div>
-
-          <!-- Mother's Name (English) -->
-          <div>
-            <label for="stu_mother_name_en" class="block text-sm font-medium text-gray-700">Mother Name (English)</label>
-            <input type="text" id="stu_mother_name_en" v-model="form.stu_mother_name_en" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-          </div>
-        </div>
-
-        <!-- Mother's Name (Arabic) -->
-        <div class="mt-6">
-          <label for="stu_mother_name_ar" class="block text-sm font-medium text-gray-700">Mother Name (Arabic)</label>
-          <input type="text" id="stu_mother_name_ar" v-model="form.stu_mother_name_ar" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-        </div>
-
-        <!-- Nationality -->
-        <div class="mt-6">
-          <label for="Nationality" class="block text-sm font-medium text-gray-700">Nationality</label>
-          <input type="text" id="Nationality" v-model="form.Nationality" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-        </div>
-
-        <!-- Date of Birth -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <div>
-            <label for="date_of_birth" class="block text-sm font-medium text-gray-700">Date of Birth</label>
-            <input type="date" id="date_of_birth" v-model="form.date_of_birth" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-          </div>
-
-          <!-- Roll -->
-          <div>
-            <label for="Roll" class="block text-sm font-medium text-gray-700">Roll</label>
-            <input type="number" id="Roll" v-model="form.Roll" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-          </div>
-        </div>
-
-        <!-- Registration ID -->
-        <div class="mt-6">
-          <label for="reg_id" class="block text-sm font-medium text-gray-700">Registration ID</label>
-          <input type="text" id="reg_id" v-model="form.reg_id" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500" required />
-        </div>
-
-        <!-- Submit Button -->
-        <div class="mt-8 text-center">
-          <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            Submit
-          </button>
-        </div>
-      </form>
-    </div>
     </AuthenticatedLayout>
-  </template>
+</template>
 
-  <script>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+<script setup>
 import { ref } from 'vue';
-import axios from 'axios';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 
-export default {
-  setup() {
-    const form = ref({
-      Student_name_bn: '',
-      Student_name_en: '',
-      Student_name_ar: '',
-      stu_father_name_bn: '',
-      stu_father_name_en: '',
-      stu_father_name_ar: '',
-      stu_mother_name_bn: '',
-      stu_mother_name_en: '',
-      stu_mother_name_ar: '',
-      Nationality: '',
-      date_of_birth: '',
-      Roll: '',
-      reg_id: '',
+const form = ref({
+    selectYear: '',
+    selectStudentType: '',
+    selectRollNumber: '',
+    selectRegId: ''
+});
+
+// Data for dropdowns
+const selectYear = ref(['2009', '2008', '2007', '2010']);
+const selectStudentType = ref(['ছাত্র', 'ছাত্রী']);
+
+// Example Search Results Data
+const students = ref([
+    { id: 1, name: 'John Doe', rollNumber: '001', registrationId: 'REG1234' },
+    { id: 2, name: 'Jane Smith', rollNumber: '002', registrationId: 'REG1235' },
+    { id: 3, name: 'Ali Ahmed', rollNumber: '003', registrationId: 'REG1236' }
+]);
+
+// Search results storage
+const searchResults = ref([]);
+
+// Search Function
+const searchStudent = () => {
+    searchResults.value = students.value.filter(student => {
+        const matchesYear = form.value.selectYear ? student.year === form.value.selectYear : true;
+        const matchesStudentType = form.value.selectStudentType ? student.type === form.value.selectStudentType : true;
+        const matchesRoll = form.value.selectRollNumber ? student.rollNumber === form.value.selectRollNumber : true;
+        const matchesRegId = form.value.selectRegId ? student.registrationId === form.value.selectRegId : true;
+
+        return matchesYear && matchesStudentType && (matchesRoll || matchesRegId);
     });
-
-    const submitForm = async () => {
-      try {
-        // Send form data to the Laravel backend
-        const response = await axios.post('/student/register', form.value);
-
-        // Handle success
-        alert(response.data.message);
-
-        // Clear form after successful submission
-        form.value = {
-          Student_name_bn: '',
-          Student_name_en: '',
-          Student_name_ar: '',
-          stu_father_name_bn: '',
-          stu_father_name_en: '',
-          stu_father_name_ar: '',
-          stu_mother_name_bn: '',
-          stu_mother_name_en: '',
-          stu_mother_name_ar: '',
-          Nationality: '',
-          date_of_birth: '',
-          Roll: '',
-          reg_id: '',
-        };
-      } catch (error) {
-        // Handle error
-        console.error('There was an error submitting the form:', error);
-        alert('Error submitting the form.');
-      }
-    };
-
-    return {
-      form,
-      submitForm,
-    };
-  },
 };
-  </script>
-
-  <style scoped>
-  /* Custom Styles for the form */
-  </style>
+</script>

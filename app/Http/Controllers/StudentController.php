@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\studentInfromation;
+use App\Models\studentInformation;
 use Illuminate\Http\Request;
 
 class StudentController extends Controller
@@ -26,9 +26,14 @@ class StudentController extends Controller
         ]);
 
         // Create new student record
-        studentInfromation::create($validated);
+        studentInformation::create($validated);
 
         // Return success response
         return response()->json(['message' => 'Student registered successfully!'], 200);
     }
+
+
+
+
+
 }

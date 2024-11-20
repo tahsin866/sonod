@@ -12,3 +12,4 @@ Route::get('/user', function (Request $request) {
 
 
 Route::post('/student', [StudentController::class, 'search']);
+Route::post('/student/register', [StudentController::class, 'store'])->name('student.store');

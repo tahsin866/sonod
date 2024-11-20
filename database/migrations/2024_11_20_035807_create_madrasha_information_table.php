@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('madrasha_information', function (Blueprint $table) {
+        Schema::create('madrasha_informations', function (Blueprint $table) {
             $table->id();
             $table->string('madrasha_name_bn', 300);
             $table->string('madrasha_name_en', 300);
@@ -30,16 +30,10 @@ return new class extends Migration
             $table->string('Estabilishyear', 300);
             $table->string('Principle_name', 250);
             $table->string('post_code', 200);
-            $table->unsignedBigInteger('student_id');
-
-            $table->foreign('student_id')
-                  ->references('id')
-                  ->on('student_infromations')
-                  ->restrictOnDelete()
-                  ->cascadeOnUpdate();
 
             $table->timestamp('created_at')->useCurrent();
             $table->timestamp('updated_at')->useCurrent()->useCurrentOnUpdate();
+
         });
     }
 
@@ -48,6 +42,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('madrasha_information');
+        Schema::dropIfExists('madrasha_informations');
     }
 };

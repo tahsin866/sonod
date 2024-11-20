@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\demoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StudentController;
 use Illuminate\Foundation\Application;
@@ -27,7 +28,7 @@ Route::get('/Fazilat.Fazilat' , function () {
 
 // routes/web.php
 
-
+Route::get('/demo',[demoController::class, 'demoAction']);
 
 // Route::get('students/search', [StudentController::class, 'search']);
 
