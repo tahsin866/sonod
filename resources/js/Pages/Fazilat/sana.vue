@@ -2,122 +2,149 @@
     <Head title="Fazilat" />
 
     <AuthenticatedLayout>
-        <div class="container mx-auto p-5" id="app">
+        <!-- Search Form Section -->
+        <section class="container-fluid p-4 bg-white rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-center mb-6">ছাত্র-ছাত্রী অনুসন্ধান</h2>
 
-            <div class="max-w-full mx-auto mt-10 p-5 bg-white shadow-lg rounded-lg">
-                <div class="text-center mb-8">
-                    <h2 style="font-family: 'Merriweather','SolaimanLipi',sans-serif;" class="text-3xl font-semibold text-gray-800">ফযিলত ছাত্রদের সনদ কার্যক্রম</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <!-- Year Dropdown -->
+                <div>
+                    <label for="year" class="block text-sm font-medium text-gray-700">বছর নির্বাচন করুন</label>
+                    <select v-model="form.year" id="year" class="form-select mt-2 w-full p-2 border rounded-md">
+                        <option value="" disabled selected>বছর নির্বাচন করুন</option>
+                        <option v-for="year in years" :key="year" :value="year">
+                            {{ year }}
+                        </option>
+                    </select>
                 </div>
-                <form @submit.prevent="searchStudent">
-                    <!-- Year Selection -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div>
-                            <label for="selectYear" class="block text-sm font-medium text-gray-700">বছর নির্বাচন করুন</label>
-                            <select id="selectYear" v-model="form.selectYear" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option disabled value="">বছর নির্বাচন করুন</option>
-                                <option v-for="year in selectYear" :key="year" :value="year">{{ year }}</option>
-                            </select>
-                        </div>
 
-                        <!-- Student Type Selection -->
-                        <div>
-                            <label for="selectStudentType" class="block text-sm font-medium text-gray-700">ছাত্র-ছাত্রী নির্বাচন করুন</label>
-                            <select id="selectStudentType" v-model="form.selectStudentType" class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <option disabled value="">ছাত্র-ছাত্রী নির্বাচন করুন</option>
-                                <option v-for="name in selectStudentType" :key="name" :value="name">{{ name }}</option>
-                            </select>
-                        </div>
-                    </div>
+                <!-- Gender Dropdown -->
+                <div>
+                    <label for="gender" class="block text-sm font-medium text-gray-700">ছাত্র-ছাত্রী নির্বাচন করুন</label>
+                    <select v-model="form.gender" id="gender" class="form-select mt-2 w-full p-2 border rounded-md">
+                        <option value="" disabled selected>ছাত্র-ছাত্রী নির্বাচন করুন</option>
+                        <option v-for="gender in genders" :key="gender.value" :value="gender.value">
+                            {{ gender.key }}
+                        </option>
+                    </select>
+                </div>
 
-                    <!-- Roll Number or Registration ID Search Fields -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        <!-- Roll Number Search -->
-                        <div>
-                            <label for="rollNumber" class="block text-sm font-medium text-gray-700">রোল নম্বর অনুসন্ধান করুন</label>
-                            <input
-                                id="rollNumber"
-                                v-model="form.selectRollNumber"
-                                type="text"
-                                placeholder="রোল নম্বর লিখুন"
-                                class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
+                <!-- Roll Input -->
+                <div>
+                    <label for="roll" class="block text-sm font-medium text-gray-700">রোল নম্বর</label>
+                    <input
+                        v-model="form.roll"
+                        type="text"
+                        id="roll"
+                        placeholder="রোল নম্বর লিখুন"
+                        class="form-control mt-2 w-full p-2 border rounded-md"
+                    />
+                </div>
 
-                        <!-- Registration ID Search -->
-                        <div>
-                            <label for="registrationId" class="block text-sm font-medium text-gray-700">রেজিস্ট্রেশন আইডি অনুসন্ধান করুন</label>
-                            <input
-                                id="registrationId"
-                                v-model="form.selectRegId"
-                                type="text"
-                                placeholder="রেজিস্ট্রেশন আইডি লিখুন"
-                                class="mt-2 p-3 border border-gray-300 rounded-lg w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="mt-8 text-center">
-                        <button type="submit" class="px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                            Search
-                        </button>
-                    </div>
-                </form>
-
-                <!-- Search Results (Example Section) -->
-                <div v-if="searchResults.length > 0" class="mt-8">
-                    <h3 class="text-xl font-semibold">Search Results</h3>
-                    <ul>
-                        <li v-for="result in searchResults" :key="result.id" class="p-4 border-b">
-                            <p><strong>Name:</strong> {{ result.name }}</p>
-                            <p><strong>Roll Number:</strong> {{ result.rollNumber }}</p>
-                            <p><strong>Registration ID:</strong> {{ result.registrationId }}</p>
-                        </li>
-                    </ul>
+                <!-- Registration ID Input -->
+                <div>
+                    <label for="registration_id" class="block text-sm font-medium text-gray-700">রেজিস্ট্রেশন আইডি</label>
+                    <input
+                        v-model="form.registration_id"
+                        type="text"
+                        id="registration_id"
+                        placeholder="রেজিস্ট্রেশন আইডি লিখুন"
+                        class="form-control mt-2 w-full p-2 border rounded-md"
+                    />
                 </div>
             </div>
-        </div>
-        <main class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-8">
-                <slot />
-            </main>
 
+            <!-- Search Button -->
+            <div class="flex justify-center mt-4">
+                <button @click="searchStudents" class="btn btn-primary px-6 py-2 rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none">
+                    অনুসন্ধান করুন
+                </button>
+            </div>
+        </section>
+
+        <!-- Search Results Section -->
+        <section v-if="searchResults.length" class="container-fluid mt-6">
+            <h3 class="text-xl font-semibold text-center mb-4">অনুসন্ধান ফলাফল</h3>
+
+            <!-- Results Table -->
+            <table class="table-auto w-full border-collapse bg-white shadow-md rounded-md">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-sm text-gray-700">নাম</th>
+                        <th class="px-4 py-2 text-left text-sm text-gray-700">পিতার নাম</th>
+                        <th class="px-4 py-2 text-left text-sm text-gray-700">মাদরাসার নাম</th>
+                        <th class="px-4 py-2 text-left text-sm text-gray-700">ক্লাস</th>
+                        <th class="px-4 py-2 text-left text-sm text-gray-700">জন্মতারিখ</th>
+                        <th class="px-4 py-2 text-left text-sm text-gray-700">রোল নম্বর</th>
+                        <th class="px-4 py-2 text-left text-sm text-gray-700">রেজিস্ট্রেশন নম্বর</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="student in searchResults" :key="student.id" class="border-t">
+                        <td class="px-4 py-2 text-sm">{{ student.Name }}</td>
+                        <td class="px-4 py-2 text-sm">{{ student.Father}}</td>
+                        <td class="px-4 py-2 text-sm">{{ student.Madrasha }}</td>
+                        <td class="px-4 py-2 text-sm">{{ student.Class }}</td>
+                        <td class="px-4 py-2 text-sm">{{ student.DateofBirth }}</td>
+                        <td class="px-4 py-2 text-sm">{{ student.Roll }}</td>
+                        <td class="px-4 py-2 text-sm">{{ student.reg_id }}</td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- No Results Found -->
+        <p v-else class="mt-6 text-center text-gray-500">কোনো তথ্য পাওয়া যায়নি।</p>
     </AuthenticatedLayout>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
 
+// Form state
 const form = ref({
-    selectYear: '',
-    selectStudentType: '',
-    selectRollNumber: '',
-    selectRegId: ''
+    Name: '',
+    Father: '',
+    Madrasha: '',
+    Class: '',
+    DateofBirth: '',
+    Roll: '',
+    reg_id: '',
 });
 
-// Data for dropdowns
-const selectYear = ref(['2009', '2008', '2007', '2010']);
-const selectStudentType = ref(['ছাত্র', 'ছাত্রী']);
+// Filter options
+const years = ref([]);
+const genders = ref([]);
 
-// Example Search Results Data
-const students = ref([
-    { id: 1, name: 'John Doe', rollNumber: '001', registrationId: 'REG1234' },
-    { id: 2, name: 'Jane Smith', rollNumber: '002', registrationId: 'REG1235' },
-    { id: 3, name: 'Ali Ahmed', rollNumber: '003', registrationId: 'REG1236' }
-]);
-
-// Search results storage
+// Search results
 const searchResults = ref([]);
 
-// Search Function
-const searchStudent = () => {
-    searchResults.value = students.value.filter(student => {
-        const matchesYear = form.value.selectYear ? student.year === form.value.selectYear : true;
-        const matchesStudentType = form.value.selectStudentType ? student.type === form.value.selectStudentType : true;
-        const matchesRoll = form.value.selectRollNumber ? student.rollNumber === form.value.selectRollNumber : true;
-        const matchesRegId = form.value.selectRegId ? student.registrationId === form.value.selectRegId : true;
-
-        return matchesYear && matchesStudentType && (matchesRoll || matchesRegId);
-    });
+// Fetch filter options (years and genders) from the backend
+const fetchFilterOptions = async () => {
+    try {
+        const response = await axios.get('/api/filter-options');
+        years.value = response.data.years;
+        genders.value = response.data.genders;
+    } catch (error) {
+        console.error('Error fetching filter options:', error);
+    }
 };
+
+// Search for students based on form filters
+const searchStudents = async () => {
+    try {
+        const response = await axios.get('/api/search', {
+            params: form.value,
+        });
+        searchResults.value = response.data;
+    } catch (error) {
+        console.error('Error searching students:', error);
+    }
+};
+
+// Load filter options on component mount
+onMounted(fetchFilterOptions);
 </script>

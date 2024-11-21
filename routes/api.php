@@ -8,8 +8,11 @@ Route::get('/user', function (Request $request) {
 })->middleware('auth:sanctum');
 
 
+Route::get('/search', [StudentController::class, 'search']);
+Route::get('/filter-options', [StudentController::class, 'getFilterOptions']);
 
 
+// Route::post('/student', [StudentController::class, 'search']);
+// Route::post('/student/register', [StudentController::class, 'store'])->name('student.store');
 
-Route::post('/student', [StudentController::class, 'search']);
-Route::post('/student/register', [StudentController::class, 'store'])->name('student.store');
+

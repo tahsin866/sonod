@@ -1,39 +1,77 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\studentInformation;
+
 use Illuminate\Http\Request;
+use App\Models\students_number_potrro;
 
 class StudentController extends Controller
 {
-    public function store(Request $request)
+    /**
+     * Search students based on filters: year, gender, roll, and registration ID.
+     */
+    public function search(Request $request)
     {
-        // Validate incoming data
-        $validated = $request->validate([
-            'Student_name_bn' => 'required|string|max:255',
-            'Student_name_en' => 'required|string|max:255',
-            'Student_name_ar' => 'required|string|max:255',
-            'stu_father_name_bn' => 'required|string|max:255',
-            'stu_father_name_en' => 'required|string|max:255',
-            'stu_father_name_ar' => 'required|string|max:255',
-            'stu_mother_name_bn' => 'required|string|max:255',
-            'stu_mother_name_en' => 'required|string|max:255',
-            'stu_mother_name_ar' => 'required|string|max:255',
-            'Nationality' => 'required|string|max:255',
-            'date_of_birth' => 'required|date',
-            'Roll' => 'required|numeric',
-            'reg_id' => 'required|string|max:255',
+        // Validate incoming request data
+        $request->validate([
+            'year' => 'nullable|string',
+            'gender' => 'nullable|integer', // Gender values: 1 (Male), 0 (Female)
+            'Roll' => 'nullable|string',
+            'reg_id' => 'nullable|string',
         ]);
 
-        // Create new student record
-        studentInformation::create($validated);
+        // Start the query to fetch students
+        $query = students_number_potrro::query();
 
-        // Return success response
-        return response()->json(['message' => 'Student registered successfully!'], 200);
+        // Apply filters if provided
+        if ($request->year) {
+            $query->where('years', $request->year); // Match the year
+        }
+
+        if ($request->gender !== null) {
+            $query->where('SRtype', $request->gender); // Match gender using SRtype
+        }
+
+        if ($request->Roll) {
+            $query->where('Roll', $request->Roll); // Match roll number
+        }
+
+        if ($request->reg_id) {
+            $query->where('reg_id', $request->reg_id); // Match registration ID
+        }
+
+        // Get the filtered results
+        $students = $query->get();
+
+        // Check if any student matches the criteria
+        if ($students->isEmpty()) {
+            // If no matching student is found, return an empty array or a custom message
+            return response()->json([], 200);
+        }
+
+        // Return the results as JSON
+        return response()->json($students);
     }
 
 
+    /**
+     * Get filter options for years and genders.
+     */
+    public function getFilterOptions()
+    {
+        // Fetch unique years from the table
+        $years = students_number_potrro::select('years')->distinct()->pluck('years');
 
+        // Define gender options based on SRtype
+        $genders = [
+            ['key' => 'ছাত্র', 'value' => 1], // Male
+            ['key' => 'ছাত্রী', 'value' => 0], // Female
+        ];
 
-
+        // Return years and genders as JSON
+        return response()->json([
+            'years' => $years,
+            'genders' => $genders,
+        ]);
+    }
 }

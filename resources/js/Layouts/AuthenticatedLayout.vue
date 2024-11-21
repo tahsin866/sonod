@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from 'vue';
 import { Link } from '@inertiajs/vue3';
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
+const showingDropdown = ref(false);
 </script>
 
 <template>
@@ -12,51 +14,17 @@ import { Link } from '@inertiajs/vue3';
       </div>
       <nav class="mt-6 space-y-4 px-6">
         <ul>
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" >
+          <!-- Navigation Items -->
+          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;">
+            <Link href="/dashboard" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+            ড্যাশবোর্ড
+            </Link>
             <Link href="/Fazilat.sana" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-            ফযিলত
+              ফযিলত
             </Link>
+
           </li>
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" >
-            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-              সানাবিয়া উলইয়া
-            </Link>
-          </li>
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" >
-            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-              সানাবিয়া
-            </Link>
-          </li>
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" >
-            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-         মুতাওয়াসসিতাহ
-            </Link>
-          </li>
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" >
-            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-          ইবতেদাইয়াহ
-            </Link>
-          </li>
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" >
-            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-             হিফজুল কোরান
-            </Link>
-          </li>
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" >
-            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-            ইলমুতাজবীদ
-            </Link>
-          </li>
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" >
-            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-       প্রয়োজনীয় ডকুমন্টে
-            </Link>
-          </li>
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" >
-            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-              সানাবিয়া উলইয়া
-            </Link>
-          </li>
+          <!-- Add other items as needed -->
         </ul>
       </nav>
     </div>
@@ -69,19 +37,40 @@ import { Link } from '@inertiajs/vue3';
           <div class="text-lg font-semibold text-gray-800 dark:text-gray-200">
             Dashboard Overview
           </div>
-          <div class="hidden sm:flex sm:items-center">
-            <button class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-lg font-semibold py-2 px-4 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition duration-150 ease-in-out">
+          <div class="relative">
+            <button
+              @click="showingDropdown = !showingDropdown"
+              class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-lg font-semibold py-2 px-4 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition duration-150 ease-in-out"
+            >
               {{ $page.props.auth.user.name }}
             </button>
+            <div
+              v-show="showingDropdown"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg rounded-lg overflow-hidden z-50"
+            >
+              <Link
+                href="/profile"
+                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+              >
+                Profile
+              </Link>
+              <ResponsiveNavLink
+                :href="route('logout')"
+                method="post"
+                as="button"
+                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+              >
+                Log Out
+              </ResponsiveNavLink>
+            </div>
           </div>
         </div>
       </header>
 
       <!-- Page Content -->
-      <main class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-8">
+      <main class="  px-6 sm:px-8 lg:px-10 py-8">
         <slot />
       </main>
     </div>
   </div>
 </template>
-
