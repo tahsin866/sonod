@@ -77,49 +77,50 @@
 
         <!-- Search Results Section -->
         <section v-if="searchResults.length" class="container-fluid mx-auto mt-6">
-            <h3 class="text-xl font-semibold text-center mb-4 text-gray-800">অনুসন্ধান ফলাফল</h3>
+    <h3 class="text-md font-semibold text-center mb-6 text-gray-800">অনুসন্ধান ফলাফল</h3>
 
-            <!-- Results Table -->
-            <div class="overflow-x-auto bg-white rounded-lg shadow">
-                <table class="table-auto w-full border-collapse">
-                    <thead class="bg-gray-200 text-gray-700">
-                        <tr>
-                            <th class="px-4 py-2 text-left text-md font-medium">নাম</th>
-                            <th class="px-4 py-2 text-left text-md font-medium">পিতার নাম</th>
-                            <th class="px-4 py-2 text-left text-md font-medium">মাদরাসার নাম</th>
-                            <th class="px-4 py-2 text-left text-md font-medium">ক্লাস</th>
-                            <th class="px-4 py-2 text-left text-md font-medium">জন্মতারিখ</th>
-                            <th class="px-4 py-2 text-left text-md font-medium">রোল নম্বর</th>
-                            <th class="px-4 py-2 text-left text-md font-medium">রেজিস্ট্রেশন নম্বর</th>
-                            <th class="px-4 py-2 text-left text-md font-medium">একশন</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-    <tr
-        v-for="student in searchResults"
-        :key="student.id"
-        class="border-t hover:bg-gray-100 transition"
-    >
-        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Name }}</td>
-        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Father }}</td>
-        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Madrasha }}</td>
-        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Class }}</td>
-        <td class="px-4 py-3 text-gray-800 text-md">{{ student.DateofBirth }}</td>
-        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Roll }}</td>
-        <td class="px-4 py-3 text-gray-800 text-md">{{ student.reg_id }}</td>
-        <td class="px-4 py-3 text-gray-800 text-md">
-            <!-- View Button -->
-                <Link href="/Fazilat.studentDetails" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-            বিস্তারিত
-            </Link>
+    <!-- Results Table -->
+    <div class="overflow-x-auto bg-white rounded-md shadow-md ring-1 ring-gray-200">
+        <table class="min-w-full table-auto border-collapse text-md">
+            <thead class="bg-gray-800 text-white">
+                <tr>
+                    <th class="px-6 py-4 text-left font-semibold">নাম</th>
+                    <th class="px-6 py-4 text-left font-semibold">পিতার নাম</th>
+                    <th class="px-6 py-4 text-left font-semibold">মাদরাসার নাম</th>
+                    <th class="px-6 py-4 text-left font-semibold">ক্লাস</th>
+                    <th class="px-6 py-4 text-left font-semibold">জন্মতারিখ</th>
+                    <th class="px-6 py-4 text-left font-semibold">রোল নম্বর</th>
+                    <th class="px-6 py-4 text-left font-semibold">রেজিস্ট্রেশন নম্বর</th>
+                    <th class="px-6 py-4 text-left font-semibold">একশন</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="student in searchResults" :key="student.id" class="border-t hover:bg-gray-50 transition-colors duration-200 ease-in-out">
+                    <td class="px-6 py-4 text-gray-800">{{ student.Name }}</td>
+                    <td class="px-6 py-4 text-gray-800">{{ student.Father }}</td>
+                    <td class="px-6 py-4 text-gray-800">{{ student.Madrasha }}</td>
+                    <td class="px-6 py-4 text-gray-800">{{ student.Class }}</td>
+                    <td class="px-6 py-4 text-gray-800">{{ student.DateofBirth }}</td>
+                    <td class="px-6 py-4 text-gray-800">{{ student.Roll }}</td>
+                    <td class="px-6 py-4 text-gray-800">{{ student.reg_id }}</td>
+                    <td class="px-6 py-4">
+                        <!-- View Button -->
+                        <Link
+                            href="/Fazilat.studentDetails"
+                            class="inline-block text-sm font-medium py-2 px-6 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
+                        >
+                            বিস্তারিত
+                        </Link>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
 
-        </td>
-    </tr>
-</tbody>
 
-                </table>
-            </div>
-        </section>
+
+
 
         <!-- No Results Found -->
         <p v-else class="mt-6 text-center text-gray-500">কোনো তথ্য পাওয়া যায়নি।</p>

@@ -3,7 +3,7 @@
 
     <AuthenticatedLayout>
         <!-- Search Form Section -->
-        <section class="container mx-auto p-6 bg-white rounded-lg shadow-md">
+        <section class="container-fluid mx-auto p-6 bg-white rounded-lg shadow-md">
             <h2 class="text-2xl font-semibold text-center mb-6 text-gray-800">সানাবিয়া উলইয়া ছাত্র-ছাত্রী অনুসন্ধান</h2>
 
             <!-- Search Form -->
@@ -76,7 +76,7 @@
         </section>
 
         <!-- Search Results Section -->
-        <section v-if="searchResults.length" class="container mx-auto mt-6">
+        <section v-if="searchResults.length" class="container-fluid mx-auto mt-6">
             <h3 class="text-xl font-semibold text-center mb-4 text-gray-800">অনুসন্ধান ফলাফল</h3>
 
             <!-- Results Table -->

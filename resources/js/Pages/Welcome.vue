@@ -62,23 +62,27 @@ function handleImageError() {
                         >
                             Dashboard
                         </Link>
-
                         <template v-else>
-                            <Link
-                                :href="route('login')"
-                                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                            >
-                                Log in
-                            </Link>
+    <div class="flex space-x-4">
+        <!-- Login Link -->
+        <Link
+            :href="route('login')"
+            class="inline-flex items-center px-6 py-3 text-sm font-medium text-gray-800 bg-white border border-gray-300 rounded-lg shadow-sm hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-[#FF2D20] transition duration-300 ease-in-out dark:text-white dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700 dark:focus:ring-white"
+        >
+            Log in
+        </Link>
 
-                            <Link
-                                v-if="canRegister"
-                                :href="route('register')"
-                                class="rounded-md px-3 py-2 text-black ring-1 ring-transparent transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
-                            >
-                                Register
-                            </Link>
-                        </template>
+        <!-- Register Link (conditionally shown) -->
+        <Link
+            v-if="canRegister"
+            :href="route('register')"
+            class="inline-flex items-center px-6 py-3 text-sm font-medium text-white bg-[#FF2D20] border border-transparent rounded-lg shadow-sm hover:bg-[#FF1A1A] focus:outline-none focus:ring-2 focus:ring-[#FF2D20] transition duration-300 ease-in-out dark:text-black dark:bg-white dark:border-gray-600 dark:hover:bg-gray-100 dark:focus:ring-white"
+        >
+            Register
+        </Link>
+    </div>
+</template>
+
                     </nav>
                 </header>
 

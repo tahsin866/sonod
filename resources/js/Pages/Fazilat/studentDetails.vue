@@ -6,6 +6,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import DangerButton from '@/Components/DangerButton.vue';
 
+
 const issuedDate = new Date().toLocaleDateString();
 
 const student = {
@@ -187,7 +188,7 @@ class="mb-7"
     <div class="relative bg-white rounded-lg shadow-lg dark:bg-gray-800">
       <!-- Modal header -->
       <div class="flex items-center justify-between p-6 border-b rounded-t-lg dark:border-gray-600 bg-gray-800 text-white">
-        <h3 class="text-xl font-semibold">Modal with Form</h3>
+        <h3 class="text-xl font-semibold">সংশোধনী ফরম</h3>
         <button
           @click="toggleModal"
           type="button"
@@ -205,7 +206,7 @@ class="mb-7"
           <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
             <!-- Name field -->
             <div class="mb-4">
-              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+              <label for="name" class="block text-md font-medium text-gray-700 dark:text-gray-300">নাম (বাংলা)</label>
               <input
                 v-model="form.name"
                 type="text"
@@ -216,7 +217,7 @@ class="mb-7"
             </div>
             <!-- Email field -->
             <div class="mb-4">
-              <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+              <label for="email" class="block text-md font-medium text-gray-700 dark:text-gray-300">নাম (ইংরেজি)</label>
               <input
                 v-model="form.email"
                 type="email"
@@ -227,80 +228,73 @@ class="mb-7"
             </div>
             <!-- Phone Number field -->
             <div class="mb-4">
-              <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+              <label for="name" class="block text-md font-medium text-gray-700 dark:text-gray-300">নাম (আরবি)</label>
               <input
-                v-model="form.phone"
-                type="tel"
-                id="phone"
+                v-model="form.name"
+                type="text"
+                id="name"
                 required
                 class="mt-2 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter phone number"
               />
             </div>
             <div class="mb-4">
-              <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
               <input
-                v-model="form.phone"
-                type="tel"
-                id="phone"
+                v-model="form.name"
+                type="text"
+                id="name"
                 required
                 class="mt-2 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter phone number"
               />
             </div>
             <div class="mb-4">
-              <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
               <input
-                v-model="form.phone"
-                type="tel"
-                id="phone"
+                v-model="form.name"
+                type="text"
+                id="name"
                 required
                 class="mt-2 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter phone number"
               />
             </div>
             <div class="mb-4">
-              <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
               <input
-                v-model="form.phone"
-                type="tel"
-                id="phone"
+                v-model="form.name"
+                type="text"
+                id="name"
                 required
                 class="mt-2 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter phone number"
               />
             </div>
             <div class="mb-4">
-              <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
               <input
-                v-model="form.phone"
-                type="tel"
-                id="phone"
+                v-model="form.name"
+                type="text"
+                id="name"
                 required
                 class="mt-2 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter phone number"
               />
             </div>
             <div class="mb-4">
-              <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
               <input
-                v-model="form.phone"
-                type="tel"
-                id="phone"
+                v-model="form.name"
+                type="text"
+                id="name"
                 required
                 class="mt-2 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter phone number"
               />
             </div>
             <div class="mb-4">
-              <label for="phone" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Phone Number</label>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
               <input
-                v-model="form.phone"
-                type="tel"
-                id="phone"
+                v-model="form.name"
+                type="text"
+                id="name"
                 required
                 class="mt-2 block w-full px-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md shadow-sm focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter phone number"
               />
             </div>
             <div class="mb-4">
@@ -352,19 +346,19 @@ class="mb-7"
 
           <!-- Action buttons -->
           <div class="flex justify-end space-x-4 mt-6">
-            <button
+            <PrimaryButton
               type="submit"
               class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-semibold rounded-md text-sm px-8 py-3 transition duration-200"
             >
-              Submit
-            </button>
-            <button
+              save
+            </PrimaryButton>
+            <DangerButton
               type="button"
               @click="toggleModal"
-              class="text-white bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-gray-300 font-semibold rounded-md text-sm px-8 py-3 transition duration-200"
+
             >
               Close
-            </button>
+            </DangerButton>
           </div>
         </form>
       </div>
