@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\sanawiyah;
 use Illuminate\Http\Request;
 use App\Models\students_number_potrro;
 
@@ -10,68 +11,125 @@ class StudentController extends Controller
     /**
      * Search students based on filters: year, gender, roll, and registration ID.
      */
-    public function search(Request $request)
-    {
-        // Validate incoming request data
-        $request->validate([
-            'year' => 'nullable|string',
-            'gender' => 'nullable|integer', // Gender values: 1 (Male), 0 (Female)
-            'Roll' => 'nullable|string',
-            'reg_id' => 'nullable|string',
-        ]);
+  public function search(Request $request)
+{
+    $request->validate([
+        'year' => 'required|string',
+        'gender' => 'required|integer',
+        'Roll' => 'required|string',
+        'reg_id' => 'required|string',
+    ], [
+        'year.required' => 'বছর নির্বাচন করুন',
+        'gender.required' => 'ছাত্র/ছাত্রী নির্বাচন করুন',
+        'Roll.required' => 'রোল নম্বর প্রয়োজন',
+        'reg_id.required' => 'রেজিস্ট্রেশন আইডি প্রয়োজন',
+    ]);
 
-        // Start the query to fetch students
-        $query = students_number_potrro::query();
+    $student = students_number_potrro::where('years', $request->year)
+    ->where('SRtype', $request->gender)
+    ->where('Roll', $request->Roll)
+    ->where('reg_id', $request->reg_id)
+    // ->where('CID', $request->CID)
+    ->where('CID', 2)  // Ensure CID is 3
+    ->first();
 
-        // Apply filters if provided
-        if ($request->year) {
-            $query->where('years', $request->year); // Match the year
-        }
 
-        if ($request->gender !== null) {
-            $query->where('SRtype', $request->gender); // Match gender using SRtype
-        }
-
-        if ($request->Roll) {
-            $query->where('Roll', $request->Roll); // Match roll number
-        }
-
-        if ($request->reg_id) {
-            $query->where('reg_id', $request->reg_id); // Match registration ID
-        }
-
-        // Get the filtered results
-        $students = $query->get();
-
-        // Check if any student matches the criteria
-        if ($students->isEmpty()) {
-            // If no matching student is found, return an empty array or a custom message
-            return response()->json([], 200);
-        }
-
-        // Return the results as JSON
-        return response()->json($students);
+    if (!$student) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'কোনো ছাত্র/ছাত্রী খুঁজে পাওয়া যায়নি',
+        ], 404);
     }
+
+    return response()->json([
+        'status' => 'success',
+        'data' => $student,
+    ], 200);
+
+
+
+
+
+}
+
+
+
+// SanabiyaUliya
+
+public function SanabiyaUliya(Request $request)
+{
+  $request->validate([
+      'year' => 'required|string',
+      'gender' => 'required|integer',
+      'Roll' => 'required|string',
+      'reg_id' => 'required|string',
+  ], [
+      'year.required' => 'বছর নির্বাচন করুন',
+      'gender.required' => 'ছাত্র/ছাত্রী নির্বাচন করুন',
+      'Roll.required' => 'রোল নম্বর প্রয়োজন',
+      'reg_id.required' => 'রেজিস্ট্রেশন আইডি প্রয়োজন',
+  ]);
+
+  $student = students_number_potrro::where('years', $request->year)
+  ->where('SRtype', $request->gender)
+  ->where('Roll', $request->Roll)
+  ->where('reg_id', $request->reg_id)
+  // ->where('CID', $request->CID)
+  ->where('CID', 3)  // Ensure CID is 3
+  ->first();
+
+
+  if (!$student) {
+      return response()->json([
+          'status' => 'error',
+          'message' => 'কোনো ছাত্র/ছাত্রী খুঁজে পাওয়া যায়নি',
+      ], 404);
+  }
+
+  return response()->json([
+      'status' => 'success',
+      'data' => $student,
+  ], 200);
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     /**
      * Get filter options for years and genders.
      */
     public function getFilterOptions()
-    {
-        // Fetch unique years from the table
-        $years = students_number_potrro::select('years')->distinct()->pluck('years');
+{
+    $years = students_number_potrro::select('years')
+    ->distinct()
+    ->orderBy('years', 'asc') // Ensures years are sorted in ascending order
+    ->pluck('years');
 
-        // Define gender options based on SRtype
-        $genders = [
-            ['key' => 'ছাত্র', 'value' => 1], // Male
-            ['key' => 'ছাত্রী', 'value' => 0], // Female
-        ];
+    // Updated gender mapping to match database values
+    $genders = [
+        ['key' => 'ছাত্র', 'value' => 1], // Male - SRtype = 0
+        ['key' => 'ছাত্রী', 'value' => 0], // Female - SRtype = 1
+    ];
 
-        // Return years and genders as JSON
-        return response()->json([
-            'years' => $years,
-            'genders' => $genders,
-        ]);
-    }
+    return response()->json([
+        'years' => $years,
+        'genders' => $genders,
+    ]);
+}
 }

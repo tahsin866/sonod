@@ -1,115 +1,203 @@
-<script setup>
-import { ref } from 'vue';
-import { Link } from '@inertiajs/vue3';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-
-const showingDropdown = ref(false);
-
-// Close the dropdown when clicking outside
-const closeDropdown = () => {
-  showingDropdown.value = false;
-};
-</script>
-
 <template>
-  <div class="min-h-screen flex">
-    <!-- Sidebar -->
-    <div class="fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-gray-800 to-gray-900 text-white shadow-lg">
-      <div class="h-20 flex items-center justify-center bg-gray-900">
-        <h1
-          style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;"
-          class="text-2xl font-semibold font-serif text-white"
-        >
-          সনদ শাখা
-        </h1>
-      </div>
-      <nav class="mt-6 space-y-4 px-6">
-        <ul>
-          <!-- Navigation Items -->
-          <li
-            style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;"
-          >
-            <Link
-              href="/dashboard"
-              class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200"
-            >
-              ড্যাশবোর্ড
-            </Link>
-            <Link
-              href="/Fazilat.sana"
-              class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200"
-            >
-              ফযিলত
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <Head title="Fazilat" />
 
-    <!-- Main Content Area -->
-    <div
-      style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;"
-      class="ml-64 flex-1 bg-gray-100 dark:bg-gray-900"
-    >
-      <!-- Header -->
-      <header class="bg-white shadow-md dark:bg-gray-800 relative">
-        <div class="px-6 py-4 flex items-center justify-between">
-          <div class="text-lg font-semibold text-gray-800 dark:text-gray-200">
-            Dashboard Overview
-          </div>
+    <AuthenticatedLayout>
+        <!-- Search Form Section -->
+        <section class="container-fluid mx-auto p-6 bg-white rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-center mb-6 text-gray-800">ফযিলত ছাত্র-ছাত্রী অনুসন্ধান</h2>
 
-          <!-- Dropdown -->
-          <div class="relative">
-            <button
-              @click="showingDropdown = !showingDropdown"
-              class="flex items-center text-gray-800 dark:text-gray-200"
-            >
-              {{ $page.props.auth.user.name }}
-              <svg
-                class="w-5 h-5 ml-2"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M19 9l-7 7-7-7"
-                ></path>
-              </svg>
-            </button>
+            <!-- Search Form -->
+            <div class="bg-gray-100 p-10">
+    <div class="bg-white shadow-xl rounded-lg p-6 border border-gray-200 relative">
+        <!-- Decorative Layer (Behind Effect) -->
+        <div class="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-50 to-gray-100 -z-10 rounded-lg transform translate-x-4 translate-y-4"></div>
 
-            <!-- Dropdown Content -->
-            <div
-              v-if="showingDropdown"
-              @click.away="closeDropdown"
-              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-lg shadow-lg py-2"
-            >
-              <ResponsiveNavLink
-                :href="route('profile.edit')"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-              >
-                Profile
-              </ResponsiveNavLink>
-              <ResponsiveNavLink
-                :href="route('logout')"
-                method="post"
-                as="button"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
-              >
-                Log Out
-              </ResponsiveNavLink>
+        <!-- Form Fields -->
+        <div class="flex flex-wrap items-center gap-6">
+            <!-- Year Dropdown -->
+            <div class="flex-1 min-w-[150px]">
+                <label for="year" class="block text-md font-medium text-gray-700 mb-1">বছর নির্বাচন করুন</label>
+                <select v-model="form.year" id="year" class="form-select w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                    <option value="" disabled selected>বছর নির্বাচন করুন</option>
+                    <option v-for="year in years" :key="year" :value="year">
+                        {{ year }}
+                    </option>
+                </select>
             </div>
-          </div>
-        </div>
-      </header>
 
-      <!-- Page Content -->
-      <main class="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10 py-8">
-        <slot />
-      </main>
+            <!-- Gender Dropdown -->
+            <div class="flex-1 min-w-[150px]">
+                <label for="gender" class="block text-md font-medium text-gray-700 mb-1">ছাত্র-ছাত্রী নির্বাচন করুন</label>
+                <select v-model="form.gender" id="gender" class="form-select w-full p-2 border border-gray-300 rounded-md shadow-sm">
+                    <option value="" disabled selected>ছাত্র-ছাত্রী নির্বাচন করুন</option>
+                    <option v-for="gender in genders" :key="gender.value" :value="gender.value">
+                        {{ gender.key }}
+                    </option>
+                </select>
+            </div>
+
+            <!-- Roll Input -->
+            <div class="flex-1 min-w-[150px]">
+                <label for="roll" class="block text-md font-medium text-gray-700 mb-1">রোল নম্বর</label>
+                <input
+                    v-model="form.Roll"
+                    type="text"
+                    id="roll"
+                    placeholder="রোল নম্বর লিখুন"
+                    class="form-control w-full p-2 border border-gray-300 rounded-md shadow-sm"
+                />
+            </div>
+
+            <!-- Registration ID Input -->
+            <div class="flex-1 min-w-[150px]">
+                <label for="registration_id" class="block text-md font-medium text-gray-700 mb-1">রেজিস্ট্রেশন আইডি</label>
+                <input
+                    v-model="form.reg_id"
+                    type="text"
+                    id="registration_id"
+                    placeholder="রেজিস্ট্রেশন আইডি লিখুন"
+                    class="form-control w-full p-2 border border-gray-300 rounded-md shadow-sm"
+                />
+            </div>
+
+            <!-- Search Button -->
+            <div class="mt-7">
+                <button
+                    @click="validateAndSearch"
+                    class="bg-blue-600 hover:bg-green-700 text-white text-sm font-medium px-6 py-2 rounded-md shadow-md transition"
+                >
+                    অনুসন্ধান করুন
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
+
+        </section>
+
+        <!-- Search Results Section -->
+        <section v-if="searchResults.length" class="container-fluid mx-auto mt-6">
+            <h3 class="text-xl font-semibold text-center mb-4 text-gray-800">অনুসন্ধান ফলাফল</h3>
+
+            <!-- Results Table -->
+            <div class="overflow-x-auto bg-white rounded-lg shadow">
+                <table class="table-auto w-full border-collapse">
+                    <thead class="bg-gray-200 text-gray-700">
+                        <tr>
+                            <th class="px-4 py-2 text-left text-md font-medium">নাম</th>
+                            <th class="px-4 py-2 text-left text-md font-medium">পিতার নাম</th>
+                            <th class="px-4 py-2 text-left text-md font-medium">মাদরাসার নাম</th>
+                            <th class="px-4 py-2 text-left text-md font-medium">ক্লাস</th>
+                            <th class="px-4 py-2 text-left text-md font-medium">জন্মতারিখ</th>
+                            <th class="px-4 py-2 text-left text-md font-medium">রোল নম্বর</th>
+                            <th class="px-4 py-2 text-left text-md font-medium">রেজিস্ট্রেশন নম্বর</th>
+                            <th class="px-4 py-2 text-left text-md font-medium">একশন</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+    <tr
+        v-for="student in searchResults"
+        :key="student.id"
+        class="border-t hover:bg-gray-100 transition"
+    >
+        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Name }}</td>
+        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Father }}</td>
+        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Madrasha }}</td>
+        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Class }}</td>
+        <td class="px-4 py-3 text-gray-800 text-md">{{ student.DateofBirth }}</td>
+        <td class="px-4 py-3 text-gray-800 text-md">{{ student.Roll }}</td>
+        <td class="px-4 py-3 text-gray-800 text-md">{{ student.reg_id }}</td>
+        <td class="px-4 py-3 text-gray-800 text-md">
+            <!-- View Button -->
+                <Link href="/Fazilat.studentDetails" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+            বিস্তারিত
+            </Link>
+
+        </td>
+    </tr>
+</tbody>
+
+                </table>
+            </div>
+        </section>
+
+        <!-- No Results Found -->
+        <p v-else class="mt-6 text-center text-gray-500">কোনো তথ্য পাওয়া যায়নি।</p>
+    </AuthenticatedLayout>
 </template>
+
+<script setup>
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import { ref, onMounted } from 'vue';
+import axios from 'axios';
+import { Link } from '@inertiajs/vue3';
+// Form state
+const form = ref({
+    year: '',
+    gender: '',
+    Roll: '',
+    reg_id: '',
+});
+
+// Filter options
+const years = ref([]);
+const genders = ref([
+    { key: 'ছাত্র', value: 1 },
+    { key: 'ছাত্রী', value: 0 },
+]);
+
+// Search results
+const searchResults = ref([]);
+
+// Fetch filter options from the backend
+const fetchFilterOptions = async () => {
+    try {
+        const response = await axios.get('/api/filter-options');
+        years.value = response.data.years;
+        genders.value = response.data.genders;
+    } catch (error) {
+        console.error('Error fetching filter options:', error);
+    }
+};
+
+// Validate form and search students
+const validateAndSearch = () => {
+    if (!form.value.year) {
+        alert('অনুগ্রহ করে বছর নির্বাচন করুন।');
+        return;
+    }
+    if (form.value.gender === '') {
+        alert('অনুগ্রহ করে ছাত্র/ছাত্রী নির্বাচন করুন।');
+        return;
+    }
+    if (!form.value.Roll) {
+        alert('অনুগ্রহ করে রোল নম্বর লিখুন।');
+        return;
+    }
+    if (!form.value.reg_id) {
+        alert('অনুগ্রহ করে রেজিস্ট্রেশন আইডি লিখুন।');
+        return;
+    }
+    searchStudents();
+};
+
+// Search students
+const searchStudents = async () => {
+    try {
+        const response = await axios.get('/api/search', {
+            params: {
+                year: form.value.year,
+                gender: form.value.gender,
+                Roll: form.value.Roll,
+                reg_id: form.value.reg_id,
+            },
+        });
+        searchResults.value = response.data.status === 'success' ? [response.data.data] : [];
+    } catch (error) {
+        alert('অনুসন্ধানে ত্রুটি হয়েছে।');
+    }
+};
+
+// Load filter options
+onMounted(fetchFilterOptions);
+</script>

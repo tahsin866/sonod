@@ -26,12 +26,23 @@ Route::get('/Fazilat.Fazilat' , function () {
     return Inertia::render('Fazilat/Fazilat');
 })->middleware(['auth', 'verified'])->name('Fazilat');
 
+Route::get('/Fazilat.studentDetails' , function () {
+    return Inertia::render('Fazilat/studentDetails');
+})->middleware(['auth', 'verified'])->name('studentDetails');
+
+
+
+
 Route::get('/Fazilat.sana' , function () {
     return Inertia::render('Fazilat/sana');
 })->middleware(['auth', 'verified'])->name('sana');
+
+
+
+
+
 // routes/web.php
 
-Route::get('/demo',[demoController::class, 'demoAction']);
 
 // Route::get('students/search', [StudentController::class, 'search']);
 

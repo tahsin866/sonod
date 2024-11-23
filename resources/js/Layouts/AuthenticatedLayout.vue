@@ -19,8 +19,11 @@ const showingDropdown = ref(false);
             <Link href="/dashboard" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
             ড্যাশবোর্ড
             </Link>
-            <Link href="/Fazilat.sana" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
               ফযিলত
+            </Link>
+            <Link href="/Fazilat.sana" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+              সানাবিয়া উলইয়া
             </Link>
 
           </li>
