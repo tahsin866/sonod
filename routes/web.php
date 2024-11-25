@@ -30,6 +30,10 @@ Route::get('/Fazilat.studentDetails' , function () {
     return Inertia::render('Fazilat/studentDetails');
 })->middleware(['auth', 'verified'])->name('studentDetails');
 
+Route::get('/fazilat/student/{Roll}', [StudentController::class, 'details'])->name('studentDetails');
+
+
+
 
 
 

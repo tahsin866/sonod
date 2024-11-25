@@ -11,7 +11,7 @@ class students_number_potrro extends Model
 
     // Define fillable attributes for mass assignment
     // protected $fillable = ['name', 'Roll', 'reg_id', 'years', 'SRtype'];
-
+    protected $fillable = ['name', 'father_name','Roll'];// Add all necessary fields
     // Disable timestamps if not present in the table
     public $timestamps = false;
 }

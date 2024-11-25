@@ -105,17 +105,21 @@
                     <td class="px-6 py-4 text-gray-800">{{ student.reg_id }}</td>
                     <td class="px-6 py-4">
                         <!-- View Button -->
-                        <Link
-                            href="/Fazilat.studentDetails"
-                            class="inline-block text-sm font-medium py-2 px-6 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
-                        >
-                            বিস্তারিত
-                        </Link>
-                    </td>
+                        <td class="px-6 py-4">
+                            <Link
+    :href="route('studentDetails', { Roll: student.Roll })"
+    class="inline-block text-sm font-medium py-2 px-6 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
+>
+    বিস্তারিত
+</Link>
+</td>
+          </td>
                 </tr>
             </tbody>
         </table>
     </div>
+
+
 </section>
 
 
