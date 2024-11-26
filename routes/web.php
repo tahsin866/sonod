@@ -30,11 +30,12 @@ Route::get('/Fazilat.studentDetails' , function () {
     return Inertia::render('Fazilat/studentDetails');
 })->middleware(['auth', 'verified'])->name('studentDetails');
 
-Route::get('/fazilat/student/{Roll}', [StudentController::class, 'details'])->name('studentDetails');
+Route::get('/fazilat/student/{Roll}/{reg_id}', [StudentController::class, 'details'])->name('studentDetails');
 
 
+// Route::get('/fazilat/student/{Roll}/{reg_id}', [StudentController::class, 'details'])->name('studentDetails');
 
-
+// Route::get('/api/student/{Roll}/{reg_id}', [StudentController::class, 'getStudentDetails']);
 
 
 Route::get('/Fazilat.sana' , function () {

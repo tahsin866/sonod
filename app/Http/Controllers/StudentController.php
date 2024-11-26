@@ -44,26 +44,28 @@ class StudentController extends Controller
         ]);
     }
 
-    public function details($Roll)
+    public function details($Roll, $reg_id)
     {
-        $student = students_number_potrro::where('Roll', $Roll)->firstOrFail();
+        $student = students_number_potrro::where('Roll', $Roll)
+            ->where('reg_id', $reg_id)
+            ->firstOrFail();
 
         return Inertia::render('Fazilat/studentDetails', [
             'Roll' => $Roll,
+            'reg_id' => $reg_id,
             'student' => $student,
         ]);
     }
-    public function getStudentDetails($Roll)
-    {
-        $student = students_number_potrro::where('Roll', $Roll)->first();
 
-        if (!$student) {
-            return response()->json(['message' => 'Student not found'], 404);
-        }
+    public function getStudentDetails($Roll, $reg_id)
+    {
+        $student = students_number_potrro::where('Roll', $Roll)
+            ->where('reg_id', $reg_id)
+            ->firstOrFail();
 
         return response()->json([
             'status' => 'success',
-            'data' => $student
+            'data' => $student,
         ]);
     }
 

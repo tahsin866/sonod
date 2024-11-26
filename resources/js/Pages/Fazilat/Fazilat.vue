@@ -84,9 +84,10 @@
         <table class="min-w-full table-auto border-collapse text-md">
             <thead class="bg-gray-800 text-white">
                 <tr>
+
                     <th class="px-6 py-4 text-left font-semibold">নাম</th>
                     <th class="px-6 py-4 text-left font-semibold">পিতার নাম</th>
-                    <th class="px-6 py-4 text-left font-semibold">মাদরাসার নাম</th>
+                    <!-- <th class="px-6 py-4 text-left font-semibold">মাদরাসার নাম</th> -->
                     <th class="px-6 py-4 text-left font-semibold">ক্লাস</th>
                     <th class="px-6 py-4 text-left font-semibold">জন্মতারিখ</th>
                     <th class="px-6 py-4 text-left font-semibold">রোল নম্বর</th>
@@ -98,7 +99,7 @@
                 <tr v-for="student in searchResults" :key="student.id" class="border-t hover:bg-gray-50 transition-colors duration-200 ease-in-out">
                     <td class="px-6 py-4 text-gray-800">{{ student.Name }}</td>
                     <td class="px-6 py-4 text-gray-800">{{ student.Father }}</td>
-                    <td class="px-6 py-4 text-gray-800">{{ student.Madrasha }}</td>
+                    <!-- <td class="px-6 py-4 text-gray-800">{{ student.Madrasha }}</td> -->
                     <td class="px-6 py-4 text-gray-800">{{ student.Class }}</td>
                     <td class="px-6 py-4 text-gray-800">{{ student.DateofBirth }}</td>
                     <td class="px-6 py-4 text-gray-800">{{ student.Roll }}</td>
@@ -106,12 +107,18 @@
                     <td class="px-6 py-4">
                         <!-- View Button -->
                         <td class="px-6 py-4">
-                            <Link
-    :href="route('studentDetails', { Roll: student.Roll })"
+                            <!-- <Link
+    :href="route('studentDetails', { Roll: student.Roll, reg_id: student.reg_id })"
     class="inline-block text-sm font-medium py-2 px-6 rounded-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 ease-in-out"
 >
     বিস্তারিত
-</Link>
+</Link> -->
+<a :href="route('studentDetails',{ Roll: student.Roll, reg_id: student.reg_id })" class="inline-block">
+  <PrimaryButton class="mx-14">
+    বিস্তারিত
+  </PrimaryButton>
+</a>
+
 </td>
           </td>
                 </tr>
@@ -136,6 +143,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import { Link } from '@inertiajs/vue3';
+import PrimaryButton from '@/Components/PrimaryButton.vue';
 // Form state
 const form = ref({
     year: '',
