@@ -44,23 +44,26 @@ class StudentController extends Controller
         ]);
     }
 
-    public function details($Roll, $reg_id)
+    public function details($Roll, $reg_id,$SRType)
     {
         $student = students_number_potrro::where('Roll', $Roll)
             ->where('reg_id', $reg_id)
+            ->where('SRType', $SRType)
             ->firstOrFail();
 
         return Inertia::render('Fazilat/studentDetails', [
             'Roll' => $Roll,
             'reg_id' => $reg_id,
+            'SRType' => $SRType,
             'student' => $student,
         ]);
     }
 
-    public function getStudentDetails($Roll, $reg_id)
+    public function getStudentDetails($Roll, $reg_id,$SRType)
     {
         $student = students_number_potrro::where('Roll', $Roll)
             ->where('reg_id', $reg_id)
+            ->where('SRType', $SRType)
             ->firstOrFail();
 
         return response()->json([

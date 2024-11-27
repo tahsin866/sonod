@@ -113,7 +113,7 @@
 >
     বিস্তারিত
 </Link> -->
-<a :href="route('studentDetails',{ Roll: student.Roll, reg_id: student.reg_id })" class="inline-block">
+<a :href="route('studentDetails',{ Roll: student.Roll, reg_id: student.reg_id, SRType: student.SRType })" class="inline-block">
   <PrimaryButton class="mx-14">
     বিস্তারিত
   </PrimaryButton>
@@ -214,3 +214,10 @@ const searchStudents = async () => {
 // Load filter options
 onMounted(fetchFilterOptions);
 </script>
+
+
+<style scoped>
+body {
+    font-family: 'Merriweather', 'SolaimanLipi', sans-serif;
+}
+</style>

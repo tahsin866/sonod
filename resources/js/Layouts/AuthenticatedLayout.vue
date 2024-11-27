@@ -6,34 +6,42 @@ const showingDropdown = ref(false);
 </script>
 
 <template>
-  <div class="min-h-screen flex">
+  <div style=" font-family: 'Merriweather', 'SolaimanLipi', sans-serif" class="min-h-screen flex bg-gray-100">
     <!-- Sidebar -->
     <div class="fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-gray-800 to-gray-900 text-white shadow-lg">
       <div class="h-20 flex items-center justify-center bg-gray-900">
-        <h1 style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" class="text-2xl font-semibold font-serif text-white">সনদ শাখা</h1>
+        <h1 class="text-2xl font-semibold font-serif text-white">সনদ শাখা  </h1>
+
       </div>
       <nav class="mt-6 space-y-4 px-6">
         <ul>
-          <!-- Navigation Items -->
-          <li style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;">
-            <Link href="/dashboard" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
-            ড্যাশবোর্ড
+          <!-- Sidebar Links -->
+          <li class="space-y-3">
+            <Link
+              href="/dashboard"
+              class="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-indigo-600 hover:text-white transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+            >
+              ড্যাশবোর্ড
             </Link>
-            <Link href="/Fazilat.Fazilat" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+            <Link
+              href="/Fazilat.Fazilat"
+              class="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-indigo-600 hover:text-white transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+            >
               ফযিলত
             </Link>
-            <Link href="/Fazilat.sana" class="block text-lg font-medium py-2 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+            <Link
+              href="/Fazilat.sana"
+              class="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-indigo-600 hover:text-white transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+            >
               সানাবিয়া উলইয়া
             </Link>
-
           </li>
-          <!-- Add other items as needed -->
         </ul>
       </nav>
     </div>
 
     <!-- Main Content Area -->
-    <div style="font-family: 'Merriweather','SolaimanLipi',sans-serif; font-size: 25px;" class="ml-64 flex-1 bg-gray-100 dark:bg-gray-900">
+    <div class="ml-64 flex-1">
       <!-- Header -->
       <header class="bg-white shadow-md dark:bg-gray-800">
         <div class="px-6 py-4 flex items-center justify-between">
@@ -71,9 +79,12 @@ const showingDropdown = ref(false);
       </header>
 
       <!-- Page Content -->
-      <main class="  px-6 sm:px-8 lg:px-10 py-8">
+      <main style=" font-family: 'Merriweather', 'SolaimanLipi', sans-serif" class="px-6 sm:px-8 lg:px-10 py-8">
         <slot />
       </main>
     </div>
   </div>
 </template>
+
+
+
