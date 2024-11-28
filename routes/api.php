@@ -9,7 +9,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-
+Route::put('/student/{Roll}/{reg_id}/{CID}', [StudentController::class, 'update']);
 Route::get('/student/{Roll}/{reg_id}/{SRType}', [StudentController::class, 'getStudentDetails']);
 
 Route::get('/search', [StudentController::class, 'search']);

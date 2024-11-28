@@ -88,6 +88,44 @@ class StudentController extends Controller
             'years' => $years,
             'genders' => $genders,
         ]);
+
+
+    }
+
+
+
+    public function update(Request $request, $Roll, $reg_id,$CID)
+    {
+        $validated = $request->validate([
+            'Name' => 'required|string',
+            'Father' => 'required|string',
+            'DateofBirth' => 'required|date',
+            'Madrasha' => 'required|string',
+        ]);
+
+        $student = students_number_potrro::where('Roll', $Roll)
+            ->where('reg_id', $reg_id)
+            ->where('Roll', $Roll)
+            ->where('CID', 2)
+            ->first();
+
+        if ($student) {
+            $student->fill($validated);
+            $student->save();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Student updated successfully',
+                'data' => $student
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Student not found'
+        ], 404);
+
+
     }
 }
 

@@ -123,16 +123,74 @@ const toggleDropdown1 = () => {
 };
 
 
+const initializeForm = () => {
+  form.value = {
+    Name: student.value.Name || '',
+    // NameEn: student.value.NameEn || '',
+    // NameAr: student.value.NameAr || '',
+    Father: student.value.Father || '',
+    // FatherEn: student.value.FatherEn || '',
+    // FatherAr: student.value.FatherAr || '',
+    // Mother: student.value.Mother || '',
+    // MotherEn: student.value.MotherEn || '',
+    // MotherAr: student.value.MotherAr || '',
+    // Phone: student.value.Phone || '',
+    // NID: student.value.NID || '',
+    DateofBirth: student.value.DateofBirth || '',
+    Madrasha: student.value.Madrasha || '',
+    // Class: student.value.Class || '',
+    // Roll: student.value.Roll || '',
+    // reg_id: student.value.reg_id || '',
+  };
+};
 
+// Enhanced modal handling
+const openEditModal = () => {
+  initializeForm();
+  showModal.value = true;
+};
+
+// Handle form submission
+const handleSubmit = async () => {
+  if (isSubmitting.value) return;
+  isSubmitting.value = true;
+
+  try {
+    // Fix the template literal syntax for the URL
+    const response = await axios.put(`/api/student/${props.Roll}/${props.reg_id}`, form.value);
+
+    if (response.data.success) {
+      await fetchStudentDetails();
+      showModal.value = false;
+      alert('Student information updated successfully');
+    }
+  } catch (error) {
+    console.error('Update error:', error);
+    alert(error.response?.data?.message || 'Failed to update student information');
+  } finally {
+    isSubmitting.value = false;
+  }
+};
+
+// Form validation
+const validateForm = computed(() => {
+  return {
+    isValid: form.value.Name && form.value.Father && form.value.DateofBirth,
+    errors: {
+      Name: !form.value.Name ? 'Name is required' : '',
+      Father: !form.value.Father ? 'Father name is required' : '',
+      DateofBirth: !form.value.DateofBirth ? 'Date of birth is required' : '',
+    }
+  };
+})
 
 
 
 
 // Handle form submission
-const handleSubmit = () => {
-  console.log("Form submitted:", form.value);
-  toggleModal(); // Close modal after submission (optional)
-};
+const isSubmitting = ref(false);
+
+// Enhanced handleSubmit with loading state
 
 </script>
 
@@ -149,9 +207,9 @@ const handleSubmit = () => {
     <div class="bg-white rounded-lg shadow-lg p-10">
       <div class="flex items-center justify-between mb-6">
         <!-- Left Button (EDIT) -->
-        <PrimaryButton @click="toggleModal" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none">
-          EDIT
-        </PrimaryButton>
+        <PrimaryButton @click="openEditModal" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none">
+    EDIT
+  </PrimaryButton>
 
         <!-- Title in the center -->
         <h3 class="text-2xl font-bold text-gray-800">
@@ -160,12 +218,12 @@ const handleSubmit = () => {
 
         <!-- Right Button (Dropdown) -->
         <div class="relative">
-          <PrimaryButton @click="toggleDropdown1" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none inline-flex items-center">
-            সনদের ধরণ
-            <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" aria-hidden="true">
-              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4 4-4" />
-            </svg>
-          </PrimaryButton>
+            <PrimaryButton @click="toggleDropdown1" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none inline-flex items-center text-lg">
+  সনদের ধরণ
+  <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" aria-hidden="true">
+    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4 4-4" />
+  </svg>
+</PrimaryButton>
 
           <!-- Dropdown Menu -->
           <div v-if="isDropdownOpen1" class="absolute top-0 right-0 mt-12 w-56 bg-white divide-y divide-gray-100 rounded-lg shadow-md z-10">
@@ -296,25 +354,91 @@ const handleSubmit = () => {
   </AuthenticatedLayout>
 
   <!-- Edit Modal -->
-  <div v-if="showModal" class="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
-    <div class="bg-white p-8 rounded-lg w-96">
-      <h3 class="text-xl font-bold mb-4">Edit Student Details</h3>
-      <form @submit.prevent="handleSubmit">
-        <div class="mb-4">
-          <label class="block text-lg font-medium">Name</label>
-          <input type="text" v-model="form.Name" class="border border-gray-300 p-2 w-full" />
+  <div
+  v-if="showModal"
+  id="center-modal"
+  tabindex="-1"
+  class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden overflow-y-auto bg-opacity-50 bg-gray-800"
+>
+<div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden overflow-y-auto bg-opacity-50 bg-gray-800">
+  <div class="relative w-full max-w-4xl bg-white rounded-lg shadow-lg">
+    <!-- Modal header -->
+    <div class="flex items-center justify-between p-6 border-b bg-gray-800 text-white rounded-t-lg">
+      <h3 class="text-xl font-semibold">সংশোধনী ফরম</h3>
+      <button @click="toggleModal" class="text-white hover:text-gray-200 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center">
+        <svg class="w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Modal body -->
+    <div class="p-6 space-y-6">
+      <form @submit.prevent="handleSubmit" class="space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Name Fields -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">নাম (বাংলা)</label>
+            <input v-model="form.Name" type="text" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"/>
+          </div>
+
+          <!-- <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">নাম (ইংরেজি)</label>
+            <input v-model="form.NameEn" type="text" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"/>
+          </div> -->
+
+          <!-- <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">নাম (আরবি)</label>
+            <input v-model="form.NameAr" type="text" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"/>
+          </div> -->
+
+          <!-- Father's Name Fields -->
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">পিতার নাম (বাংলা)</label>
+            <input v-model="form.Father" type="text" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"/>
+          </div>
+
+          <!-- <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">পিতার নাম (ইংরেজি)</label>
+            <input v-model="form.FatherEn" type="text" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"/>
+          </div> -->
+
+          <!-- <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">পিতার নাম (আরবি)</label>
+            <input v-model="form.FatherAr" type="text" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"/>
+          </div> -->
+
+          <!-- Other Fields -->
+          <!-- <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">মোবাইল নম্বর</label>
+            <input v-model="form.Phone" type="tel" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"/>
+          </div> -->
+
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">জন্ম তারিখ</label>
+            <input v-model="form.DateofBirth" type="date" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"/>
+          </div>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">মাদ্রাসা</label>
+            <input v-model="form.Madrasha" type="text" class="w-full rounded-lg border-gray-300 focus:border-blue-500 focus:ring-blue-500"/>
+          </div>
         </div>
-        <div class="mb-4">
-          <label class="block text-lg font-medium">Father's Name</label>
-          <input type="text" v-model="form.Father" class="border border-gray-300 p-2 w-full" />
-        </div>
-        <div class="flex justify-between">
-          <PrimaryButton type="submit">Save</PrimaryButton>
-          <DangerButton @click="toggleModal">Cancel</DangerButton>
+
+        <!-- Form Actions -->
+        <div class="flex justify-end space-x-4 pt-4 border-t">
+          <DangerButton @click="toggleModal">
+            Cancel
+          </DangerButton>
+          <PrimaryButton type="submit" :disabled="isSubmitting">
+            {{ isSubmitting ? 'Saving...' : 'Save Changes' }}
+          </PrimaryButton>
         </div>
       </form>
     </div>
   </div>
+</div>
+</div>
 </template>
 
 

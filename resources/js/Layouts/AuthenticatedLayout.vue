@@ -10,7 +10,7 @@ const showingDropdown = ref(false);
     <!-- Sidebar -->
     <div class="fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-gray-800 to-gray-900 text-white shadow-lg">
       <div class="h-20 flex items-center justify-center bg-gray-900">
-        <h1 class="text-2xl font-semibold font-serif text-white">সনদ শাখা  </h1>
+        <h1 style=" font-family: 'Merriweather', 'SolaimanLipi', sans-serif" class="text-2xl font-semibold font-serif text-white">সনদ শাখা  </h1>
 
       </div>
       <nav class="mt-6 space-y-4 px-6">
