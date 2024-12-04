@@ -48,7 +48,7 @@ Route::get('/Fazilat.sana' , function () {
 
 // routes/web.php
 
-Route::put('/student/{Roll}/{reg_id}/{CID}', [StudentController::class, 'update']);
+Route::put('/student/{Roll}/{reg_id}', [StudentController::class, 'update']);
 // Route::get('students/search', [StudentController::class, 'search']);
 
 Route::post('/student/register', [StudentController::class, 'store'])->name('student.store');

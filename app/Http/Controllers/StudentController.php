@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\sanawiyah;
-use Illuminate\Http\Request;
 use App\Models\students_number_potrro;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class StudentController extends Controller
 {
@@ -28,7 +28,7 @@ class StudentController extends Controller
             ['SRtype', $request->gender],
             ['Roll', $request->Roll],
             ['reg_id', $request->reg_id],
-            ['CID', 2]
+            ['CID', 2],
         ])->first();
 
         if (!$student) {
@@ -44,32 +44,43 @@ class StudentController extends Controller
         ]);
     }
 
-    public function details($Roll, $reg_id,$SRType)
+    public function details($Roll, $reg_id, $SRType)
     {
-        $student = students_number_potrro::where('Roll', $Roll)
-            ->where('reg_id', $reg_id)
-            ->where('SRType', $SRType)
-            ->firstOrFail();
+        try {
+            $student = students_number_potrro::where('Roll', $Roll)
+                ->where('reg_id', $reg_id)
+                ->where('SRType', $SRType)
+                ->firstOrFail();
 
-        return Inertia::render('Fazilat/studentDetails', [
-            'Roll' => $Roll,
-            'reg_id' => $reg_id,
-            'SRType' => $SRType,
-            'student' => $student,
-        ]);
+            return Inertia::render('Fazilat/studentDetails', [
+                'Roll' => $Roll,
+                'reg_id' => $reg_id,
+                'SRType' => $SRType,
+                'student' => $student,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return redirect()->back()->withErrors(['message' => 'Student not found']);
+        }
     }
 
-    public function getStudentDetails($Roll, $reg_id,$SRType)
+    public function getStudentDetails($Roll, $reg_id, $SRType)
     {
-        $student = students_number_potrro::where('Roll', $Roll)
-            ->where('reg_id', $reg_id)
-            ->where('SRType', $SRType)
-            ->firstOrFail();
+        try {
+            $student = students_number_potrro::where('Roll', $Roll)
+                ->where('reg_id', $reg_id)
+                ->where('SRType', $SRType)
+                ->firstOrFail();
 
-        return response()->json([
-            'status' => 'success',
-            'data' => $student,
-        ]);
+            return response()->json([
+                'status' => 'success',
+                'data' => $student,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Student not found',
+            ], 404);
+        }
     }
 
     public function getFilterOptions()
@@ -88,51 +99,35 @@ class StudentController extends Controller
             'years' => $years,
             'genders' => $genders,
         ]);
-
-
     }
 
-
-
-    public function update(Request $request, $Roll, $reg_id,$CID)
+    public function update(Request $request, $Roll, $reg_id)
     {
         $validated = $request->validate([
             'Name' => 'required|string',
             'Father' => 'required|string',
             'DateofBirth' => 'required|date',
-            'Madrasha' => 'required|string',
+            // 'Madrasha' => 'required|string',
         ]);
 
         $student = students_number_potrro::where('Roll', $Roll)
             ->where('reg_id', $reg_id)
-            ->where('Roll', $Roll)
             ->where('CID', 2)
             ->first();
 
-        if ($student) {
-            $student->fill($validated);
-            $student->save();
-
+        if (!$student) {
             return response()->json([
-                'success' => true,
-                'message' => 'Student updated successfully',
-                'data' => $student
-            ]);
+                'success' => false,
+                'message' => 'Student not found',
+            ], 404);
         }
 
+        $student->update($validated);
+
         return response()->json([
-            'success' => false,
-            'message' => 'Student not found'
-        ], 404);
-
-
+            'success' => true,
+            'message' => 'Student updated successfully',
+            'data' => $student->fresh(),
+        ]);
     }
 }
-
-
-
-
-
-
-
-

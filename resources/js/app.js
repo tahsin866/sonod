@@ -7,7 +7,8 @@ import { createApp, h } from 'vue';
 import { ZiggyVue } from '../../vendor/tightenco/ziggy';
 import 'vuetify/dist/vuetify.css';
 
-
+// import Toast from 'vue-toastification'
+// import 'vue-toastification/dist/index.css'
 
 
 
@@ -36,3 +37,4 @@ createInertiaApp({
 
 
 app.use(vuetify);
+// app.use(Toast)
