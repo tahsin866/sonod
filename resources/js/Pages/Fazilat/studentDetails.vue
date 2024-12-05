@@ -12,186 +12,157 @@ const props = defineProps({
     SRType: { type: [String, Number], required: true }
 });
 
-// Reactive state for student details
-const student = ref({
-  Name: "",
-  Father: "",
-  Madrasha: "",
-  Class: "",
-  DateofBirth: "",
-  Roll: "",
-  reg_id: "",
-  Nationality: "",
-  Division: "",
-  SubValue_1: "",
-  SubValue_2: "",
-  SubValue_3: "",
-  SubValue_4: "",
-  SubValue_5: "",
-  SubValue_6: "",
-  SubValue_7: "",
-  SubValue_8: "",
-  Total: "",
-  Division: "",
-  SRType: props.SRType,
-});
-
-// Subjects for Male and Female students
-const maleSubjects = [
-  { name: 'مشكوة المصابيح (الجزء الأول)' },
-  { name: 'تفسير البيضاوي' },
-  { name: 'شرح العقائد و الفرق الباطلة' },
-  { name: 'مشكوة المصابيح (الجزء الثاني)' },
-  { name: 'الهداية (الجزء الثالث)' },
-  { name: 'الهداية (الجزء الرابع)' },
-  { name: 'نزهة النظر في شرح نخبة الفكر' },
-  { name: 'تحريك دار العلوم ديوبند' }
-];
-
-const femaleSubjects = [
-  { name: 'مشكوة المصابيح (الجزء الأول)' },
-  { name: 'تفسيرجلالين (الجزء الأول)' },
-  { name: 'تفسيرجلالين (الجزء الثاني)' },
-  { name: 'مشكوة المصابيح (الجزء الثاني)' },
-  { name: 'الهداية (الجزء الثالث)' },
-  { name: 'الهداية (الجزء الرابع)' },
-  { name: 'عقيدة الطحاوي' }
-];
-
-// Define the subjects based on SRType
-const currentSubjects = computed(() => {
-  return Number(props.SRType) === 1 ? maleSubjects : femaleSubjects;
-});
-
-// Fetch student details
-const fetchStudentDetails = async () => {
-  try {
-    const response = await axios.get(`/api/student/${props.Roll}/${props.reg_id}/${props.SRType}`);
-    student.value = response.data.data || {};
-    student.value.results = student.value.results || [];
-  } catch (error) {
-    console.error("Error fetching student details:", error);
-  }
-};
-
-// Fetch student details when the component is mounted
-onMounted(() => {
-  fetchStudentDetails();
-});
-
-// Modal functionality
-const showModal = ref(false);
-const toggleModal = () => {
-  showModal.value = !showModal.value;
-};
-
-// Form data for editing student details
+// Form state
 const form = ref({
-  Name: "",
-  Father: "",
-  Roll: "",
-  Nationality: "",
-  // Add other fields as needed
+    Name: '',
+    Father: '',
+    st_en_name: '',
+    DateofBirth: '',
+    st_en_Fname: '',
+    // FatherEnglish: '',
+    // BirthRegistrationNo: '',
+    // MobileNo: '',
+    // AlternativeMobile: '',
+    Nationality: '',
+    // Division: '',
+    // SubValue_1: '',
+    // SubValue_2: '',
+    // SubValue_3: '',
+    // SubValue_4: '',
+    // SubValue_5: '',
+    // SubValue_6: '',
+    // SubValue_7: '',
+    // SubValue_8: '',
+    // Total: '',
+});
+
+const student = ref({
+  SubValue_1: '',
+  SubValue_2: '',
+  SubValue_3: '',
+  SubValue_4: '',
+  SubValue_5: '',
+  SubValue_6: '',
+  SubValue_7: '',
+  SubValue_8: '',
+  Total: '',
+  Division: ''
 });
 
 
-const isDropdownOpen = ref(false);
 
-const checkboxes = ref([
-  { label: 'বাংলা মার্কশীট', checked: false},
-  { label: 'আরবি মার্কশীট', checked: false},
-  { label: 'ইংরেজি মার্কশীট', checked: false  },
-]);
-
-const toggleDropdown = () => {
-  isDropdownOpen.value = !isDropdownOpen.value;
-};
-
-
-
-const isDropdownOpen1 = ref(false);
-
-const checkboxes1 = ref([
-  { label: 'বাংলা-ইংরেজি', checked: false  },
-  { label: 'আরবি-ইংরেজি', checked: false },
-
-]);
-
-const toggleDropdown1 = () => {
-  isDropdownOpen1.value = !isDropdownOpen1.value;
-};
-
-
-
-
-
-
-
-
-
-const initializeForm = () => {
-  form.value = {
-    Name: student.value.Name || '',
-    Father: student.value.Father || '',
-    DateofBirth: student.value.DateofBirth || '',
-    // Madrasha: student.value.Madrasha || '',
-  };
-};
-
-// Enhanced modal handling
+// Add this missing method for edit modal
 const openEditModal = () => {
-  initializeForm();
   showModal.value = true;
 };
 
-// Handle form submission
-const handleSubmit = async () => {
-    if (isSubmitting.value) return;
-    isSubmitting.value = true;
 
+
+// UI state
+const isSubmitting = ref(false);
+const showModal = ref(false);
+const isDropdownOpen = ref(false);
+const isDropdownOpen1 = ref(false);
+
+// Checkboxes state
+const checkboxes = ref([
+    { label: 'বাংলা মার্কশীট', checked: false },
+    { label: 'আরবি মার্কশীট', checked: false },
+    { label: 'ইংরেজি মার্কশীট', checked: false },
+]);
+
+const checkboxes1 = ref([
+    { label: 'বাংলা-ইংরেজি', checked: false },
+    { label: 'আরবি-ইংরেজি', checked: false },
+]);
+
+// Subjects data
+const maleSubjects = [
+    { name: 'مشكوة المصابيح (الجزء الأول)' },
+    { name: 'تفسير البيضاوي' },
+    { name: 'شرح العقائد و الفرق الباطلة' },
+    { name: 'مشكوة المصابيح (الجزء الثاني)' },
+    { name: 'الهداية (الجزء الثالث)' },
+    { name: 'الهداية (الجزء الرابع)' },
+    { name: 'نزهة النظر في شرح نخبة الفكر' },
+    { name: 'تحريك دار العلوم ديوبند' }
+];
+
+const femaleSubjects = [
+    { name: 'مشكوة المصابيح (الجزء الأول)' },
+    { name: 'تفسيرجلالين (الجزء الأول)' },
+    { name: 'تفسيرجلالين (الجزء الثاني)' },
+    { name: 'مشكوة المصابيح (الجزء الثاني)' },
+    { name: 'الهداية (الجزء الثالث)' },
+    { name: 'الهداية (الجزء الرابع)' },
+    { name: 'عقيدة الطحاوي' }
+];
+
+// Computed properties
+const currentSubjects = computed(() => {
+    return Number(props.SRType) === 1 ? maleSubjects : femaleSubjects;
+});
+
+const validateForm = computed(() => {
+    return {
+        isValid: form.value.Name && form.value.Father && form.value.DateofBirth,
+        errors: {
+            Name: !form.value.Name ? 'Name is required' : '',
+            Father: !form.value.Father ? 'Father name is required' : '',
+            DateofBirth: !form.value.DateofBirth ? 'Date of birth is required' : '',
+        },
+    };
+});
+
+// Methods
+const fetchStudentDetails = async () => {
     try {
-        const response = await axios.put(`/api/student/${props.Roll}/${props.reg_id}`, form.value);
+        const response = await axios.get(`/api/student/${props.Roll}/${props.reg_id}/${props.SRType}`);
+        if (response.data.data) {
+            Object.assign(form.value, response.data.data);
+        }
+    } catch (error) {
+        console.error("Error fetching student details:", error);
+    }
+};
 
+const handleSubmit = async () => {
+    if (isSubmitting.value || !validateForm.value.isValid) return;
+
+    isSubmitting.value = true;
+    try {
+        const response = await axios.put(`/student/${props.Roll}/${props.reg_id}`, form.value);
         if (response.data.success) {
             await fetchStudentDetails();
             showModal.value = false;
             alert('Student information updated successfully');
         }
     } catch (error) {
-        if (error.response) {
-            alert(error.response.data.message);
-        } else if (error.request) {
-            alert('Network error occurred');
-        } else {
-            alert('An error occurred while processing your request');
-        }
-        console.error('Error details:', error);
+        const errorMessage = error.response?.data?.message ||
+                           'An error occurred while processing your request';
+        alert(errorMessage);
     } finally {
         isSubmitting.value = false;
     }
 };
+const toggleModal = () => {
+    showModal.value = !showModal.value;
+};
 
-// Form validation
-const validateForm = computed(() => {
-  return {
-    isValid: form.value.Name && form.value.Father && form.value.DateofBirth,
-    errors: {
-      Name: !form.value.Name ? 'Name is required' : '',
-      Father: !form.value.Father ? 'Father name is required' : '',
-      DateofBirth: !form.value.DateofBirth ? 'Date of birth is required' : '',
-    },
-  };
-})
+const toggleDropdown = () => {
+    isDropdownOpen.value = !isDropdownOpen.value;
+};
 
+const toggleDropdown1 = () => {
+    isDropdownOpen1.value = !isDropdownOpen1.value;
+};
 
-
-
-// Handle form submission
-const isSubmitting = ref(false);
-
-// Enhanced handleSubmit with loading state
-
+// Lifecycle hooks
+onMounted(() => {
+    fetchStudentDetails();
+});
 </script>
+
 
 <template>
   <AuthenticatedLayout>
@@ -202,7 +173,7 @@ const isSubmitting = ref(false);
     </a>
 
     <!-- Student Details Section -->
-    <div class="container mx-auto px-6 py-8">
+    <div class="container-fluid mx-auto px-6 py-8">
     <div class="bg-white rounded-lg shadow-lg p-10">
       <div class="flex items-center justify-between mb-6">
         <!-- Left Button (EDIT) -->
@@ -242,35 +213,59 @@ const isSubmitting = ref(false);
         <tbody>
           <tr class="border-b bg-gray-50">
             <td class="px-6 py-4 text-lg font-semibold text-gray-600">নাম (বাংলা)</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ student.Name }}</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-6 py-4 text-lg font-semibold text-gray-600">পিতার নাম (বাংলা)</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ student.Father }}</td>
+            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Name }}</td>
           </tr>
           <tr class="border-b bg-gray-50">
+    <td class="px-6 py-4 text-lg font-semibold text-gray-600">নাম (ইংরেজি)</td>
+    <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.st_en_name }}</td>
+</tr>
+          <tr class="border-b">
+            <td class="px-6 py-4 text-lg font-semibold text-gray-600">পিতার নাম (বাংলা)</td>
+            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Father }}</td>
+          </tr>
+          <tr class="border-b bg-gray-50">
+    <td class="px-6 py-4 text-lg font-semibold text-gray-600">পিতার নাম (ইংরেজি)</td>
+    <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.st_en_Fname }}</td>
+</tr>
+          <tr class="border-b bg-gray-50">
             <td class="px-6 py-4 text-lg font-semibold text-gray-600">মাদরাসার নাম</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ student.Madrasha }}</td>
+            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Madrasha }}</td>
           </tr>
           <tr class="border-b">
             <td class="px-6 py-4 text-lg font-semibold text-gray-600">শ্রেণী</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ student.Class }}</td>
+            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Class }}</td>
           </tr>
           <tr class="border-b">
             <td class="px-6 py-4 text-lg font-semibold text-gray-600">রোল নম্বর</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ student.Roll }}</td>
+            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Roll }}</td>
           </tr>
           <tr class="border-b">
             <td class="px-6 py-4 text-lg font-semibold text-gray-600">রেজিস্ট্রেশন নম্বর</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ student.reg_id }}</td>
+            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.reg_id }}</td>
           </tr>
+          <tr class="border-b">
+            <td class="px-6 py-4 text-lg font-semibold text-gray-600">জন্মতারিখ</td>
+            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.DateofBirth }}</td>
+          </tr>
+          <tr class="border-b">
+  <td class="px-6 py-4 text-lg font-semibold text-gray-600">জন্মনিবন্ধন/এনআইডি</td>
+  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.BirthRegistrationNo }}</td>
+</tr>
+<tr class="border-b">
+  <td class="px-6 py-4 text-lg font-semibold text-gray-600">মোবাইল নম্বর</td>
+  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.MobileNo }}</td>
+</tr>
+<tr class="border-b">
+  <td class="px-6 py-4 text-lg font-semibold text-gray-600">বিকল্প মোবাইল</td>
+  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.AlternativeMobile }}</td>
+</tr>
         </tbody>
       </table>
     </div>
   </div>
 
     <!-- Results Section -->
-    <div class="container mx-auto px-6 py-8">
+    <div class="container-fluid mx-auto px-6 py-8">
   <div class="bg-white shadow-lg rounded-lg p-8">
     <!-- Header Section -->
     <div class="flex items-center justify-between mb-6">
@@ -383,170 +378,111 @@ const isSubmitting = ref(false);
 
     <!-- Modal Body -->
     <div class="p-8 space-y-8">
-      <form @submit.prevent="handleSubmit" class="space-y-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Name Field -->
-          <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              নাম (বাংলা)
-            </label>
-            <input
-              v-model="form.Name"
-              type="text"
-              placeholder="নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div>
-
-          <!-- Father's Name Field -->
-          <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              পিতার নাম (বাংলা)
-            </label>
-            <input
-              v-model="form.Father"
-              type="text"
-              placeholder="পিতার নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div>
-
-          <!-- Date of Birth -->
-          <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              জন্ম তারিখ
-            </label>
-            <input
-              v-model="form.DateofBirth"
-              type="date"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div>
-
-          <!-- Madrasha Field -->
-          <!-- <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              মাদ্রাসা
-            </label>
-            <input
-              v-model="form.Madrasha"
-              type="text"
-              placeholder="মাদ্রাসার নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div> -->
+    <form @submit.prevent="handleSubmit" class="space-y-8">
+      <!-- Bangla Information -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-gray-700">নাম (বাংলা)</label>
+          <input
+            v-model="form.Name"
+            type="text"
+            placeholder="নাম লিখুন"
+            class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+          />
         </div>
 
-
-
-
-        <!-- english information -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Name Field -->
-          <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              নাম (ইংরেজি)
-            </label>
-            <input
-              v-model="form.Name"
-              type="text"
-              placeholder="নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div>
-
-          <!-- Father's Name Field -->
-          <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              পিতার নাম (ইংরেজি)
-            </label>
-            <input
-              v-model="form.Father"
-              type="text"
-              placeholder="পিতার নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div>
-
-          <!-- Date of Birth -->
-          <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              পিতার নাম (ইংরেজি)
-            </label>
-            <input
-              v-model="form.Father"
-              type="text"
-              placeholder="পিতার নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div>
-          <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              পিতার নাম (ইংরেজি)
-            </label>
-            <input
-              v-model="form.Father"
-              type="text"
-              placeholder="পিতার নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div>
-          <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              পিতার নাম (ইংরেজি)
-            </label>
-            <input
-              v-model="form.Father"
-              type="text"
-              placeholder="পিতার নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div>
-          <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              পিতার নাম (ইংরেজি)
-            </label>
-            <input
-              v-model="form.Father"
-              type="text"
-              placeholder="পিতার নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div>
-
-          <!-- Madrasha Field -->
-          <!-- <div class="space-y-3">
-            <label class="block text-sm font-medium text-gray-700">
-              মাদ্রাসা
-            </label>
-            <input
-              v-model="form.Madrasha"
-              type="text"
-              placeholder="মাদ্রাসার নাম লিখুন"
-              class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
-            />
-          </div> -->
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-gray-700">পিতার নাম (বাংলা)</label>
+          <input
+            v-model="form.Father"
+            type="text"
+            placeholder="পিতার নাম লিখুন"
+            class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+          />
         </div>
 
-        <!-- Form Actions -->
-        <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
-          <button
-            type="button"
-            @click="toggleModal"
-            class="px-6 py-2 text-sm font-medium text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
-          >
-            বাতিল করুন
-          </button>
-          <button
-            type="submit"
-            :disabled="isSubmitting"
-            class="px-6 py-2 text-sm font-medium text-white bg-gray-700 rounded-lg hover:bg-gray-800 transition"
-          >
-            {{ isSubmitting ? 'সংরক্ষণ হচ্ছে...' : 'সংরক্ষণ করুন' }}
-          </button>
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-gray-700">জন্ম তারিখ</label>
+          <input
+            v-model="form.DateofBirth"
+            type="date"
+            class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+          />
         </div>
-      </form>
-    </div>
+      </div>
+
+      <!-- English Information -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="space-y-3">
+    <label class="block text-sm font-medium text-gray-700">নাম (ইংরেজি)</label>
+    <input
+        v-model="form.st_en_name"
+        type="text"
+        placeholder="Name in English"
+        class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+    />
+</div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-gray-700">পিতার নাম (ইংরেজি)</label>
+          <input
+            v-model="form.st_en_Fname"
+            type="text"
+            placeholder="Father's Name in English"
+            class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+          />
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-gray-700">জন্মনিবন্ধন নম্বর / এন আইডি নম্বর</label>
+          <input
+            v-model="form.BirthRegistrationNo"
+            type="text"
+            placeholder="Birth Registration/NID Number"
+            class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+          />
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-gray-700">মোবাইল নম্বর</label>
+          <input
+            v-model="form.MobileNo"
+            type="text"
+            placeholder="Mobile Number"
+            class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+          />
+        </div>
+
+        <div class="space-y-3">
+          <label class="block text-sm font-medium text-gray-700">বিকল্প মোবাইল নম্বর</label>
+          <input
+            v-model="form.AlternativeMobile"
+            type="text"
+            placeholder="Alternative Mobile Number"
+            class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
+          />
+        </div>
+      </div>
+
+      <!-- Form Actions -->
+      <div class="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+        <button
+          type="button"
+          @click="toggleModal"
+          class="px-6 py-2 text-sm font-medium text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 transition"
+        >
+          বাতিল করুন
+        </button>
+        <button
+          type="submit"
+          :disabled="isSubmitting"
+          class="px-6 py-2 text-sm font-medium text-white bg-gray-700 rounded-lg hover:bg-gray-800 transition"
+        >
+          {{ isSubmitting ? 'সংরক্ষণ হচ্ছে...' : 'সেভ করুন' }}
+        </button>
+      </div>
+    </form>
+  </div>
   </div>
 </div>
 

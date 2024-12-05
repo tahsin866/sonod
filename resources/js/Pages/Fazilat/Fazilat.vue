@@ -83,7 +83,7 @@ onMounted(fetchFilterOptions);
 
     <AuthenticatedLayout>
       <!-- Search Form Section -->
-      <section class="container mx-auto p-8 bg-white rounded-lg shadow-xl">
+      <section class="container-fluid mx-auto p-8 bg-white rounded-lg shadow-xl">
         <h2 class="text-3xl font-bold text-center mb-8 text-gray-900">ফযিলত ছাত্র-ছাত্রী অনুসন্ধান</h2>
 
         <!-- Search Form -->
@@ -170,7 +170,7 @@ onMounted(fetchFilterOptions);
       </section>
 
       <!-- Search Results Section -->
-      <section v-if="searchResults.length" class="container mx-auto mt-8">
+      <section v-if="searchResults.length" class="container-fluid mx-auto mt-8">
         <h3 class="text-2xl font-bold text-center mb-6 text-gray-900">অনুসন্ধান ফলাফল</h3>
 
         <div class="overflow-x-auto bg-white rounded-lg shadow-lg">

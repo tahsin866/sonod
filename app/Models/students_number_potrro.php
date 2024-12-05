@@ -18,6 +18,11 @@ class students_number_potrro extends Model
         'Father',
         'DateofBirth',
         'Madrasha',
+        'st_en_name',
+        'FatherEnglish',
+        'BirthRegistrationNo',
+        'MobileNo',
+        'AlternativeMobile'
     ];
 
     public static function findByRollAndRegId($roll, $reg_id)

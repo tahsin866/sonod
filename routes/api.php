@@ -11,7 +11,7 @@ Route::get('/user', function (Request $request) {
 
 // Route::put('/student/{Roll}/{reg_id}', [StudentController::class, 'update']);
 
-Route::match(['get', 'put','post'], '/student/{Roll}/{reg_id}', [StudentController::class, 'update']);
+Route::put('/student/{Roll}/{reg_id}', [StudentController::class, 'update']);
 Route::get('/student/{Roll}/{reg_id}/{SRType}', [StudentController::class, 'getStudentDetails']);
 
 Route::get('/search', [StudentController::class, 'search']);

@@ -107,27 +107,37 @@ class StudentController extends Controller
             'Name' => 'required|string',
             'Father' => 'required|string',
             'DateofBirth' => 'required|date',
-            // 'Madrasha' => 'required|string',
+            'st_en_name' => 'required|string', // Updated validation rule
+            // 'FatherEnglish' => 'required|string',
+            // 'BirthRegistrationNo' => 'required|string',
+            // 'MobileNo' => 'required|string',
+            // 'AlternativeMobile' => 'nullable|string'
         ]);
 
-        $student = students_number_potrro::where('Roll', $Roll)
-            ->where('reg_id', $reg_id)
-            ->where('CID', 2)
-            ->first();
+        $student = students_number_potrro::where([
+            'Roll' => $Roll,
+            'reg_id' => $reg_id,
+            'CID' => 2
+        ])->first();
 
-        if (!$student) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Student not found',
-            ], 404);
+        if ($student) {
+            $student->update($validated);
+            $message = 'Student updated successfully';
+        } else {
+            $validated['Roll'] = $Roll;
+            $validated['reg_id'] = $reg_id;
+            $validated['CID'] = 2;
+            $student = students_number_potrro::create($validated);
+            $message = 'Student created successfully';
         }
-
-        $student->update($validated);
 
         return response()->json([
             'success' => true,
-            'message' => 'Student updated successfully',
-            'data' => $student->fresh(),
+            'message' => $message,
+            'data' => $student->fresh()
         ]);
     }
-}
+
+
+    }
+

@@ -6,62 +6,64 @@ const showingDropdown = ref(false);
 </script>
 
 <template>
-  <div style=" font-family: 'Merriweather', 'SolaimanLipi', sans-serif" class="min-h-screen flex bg-gray-100">
+  <div  style="font-family: 'SolaimanLipi', sans-serif;" class="min-h-screen flex bg-gray-100 dark:bg-gray-900">
     <!-- Sidebar -->
-    <div class="fixed top-0 left-0 w-64 h-full bg-gradient-to-b from-gray-800 to-gray-900 text-white shadow-lg">
-      <div class="h-20 flex items-center justify-center bg-gray-900">
-        <h1 style=" font-family: 'Merriweather', 'SolaimanLipi', sans-serif" class="text-2xl font-semibold font-serif text-white">সনদ শাখা  </h1>
-
+    <aside class="fixed top-0 left-0 w-60 h-full bg-[#FFFAFA] text-gray-800 shadow-md">
+      <div class="h-20 flex items-center justify-center">
+        <h1 class="text-xl font-bold text-gray-800">সনদ শাখা</h1>
       </div>
-      <nav class="mt-6 space-y-4 px-6">
+      <nav class="mt-6 px-4 space-y-2">
         <ul>
-          <!-- Sidebar Links -->
-          <li class="space-y-3">
+          <li>
             <Link
               href="/dashboard"
-              class="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-indigo-600 hover:text-white transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+              class="block py-3 px-4 rounded-md text-base font-medium hover:bg-blue-100 transition"
             >
               ড্যাশবোর্ড
             </Link>
+          </li>
+          <li>
             <Link
               href="/Fazilat.Fazilat"
-              class="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-indigo-600 hover:text-white transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+              class="block py-3 px-4 rounded-md text-base font-medium hover:bg-blue-100 transition"
             >
               ফযিলত
             </Link>
+          </li>
+          <li>
             <Link
               href="/Fazilat.sana"
-              class="block py-3 px-4 rounded-lg text-lg font-medium hover:bg-indigo-600 hover:text-white transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none"
+              class="block py-3 px-4 rounded-md text-base font-medium hover:bg-blue-100 transition"
             >
               সানাবিয়া উলইয়া
             </Link>
           </li>
         </ul>
       </nav>
-    </div>
+    </aside>
 
     <!-- Main Content Area -->
-    <div class="ml-64 flex-1">
+    <div class="ml-60 flex-1">
       <!-- Header -->
-      <header class="bg-white shadow-md dark:bg-gray-800">
-        <div class="px-6 py-4 flex items-center justify-between">
-          <div class="text-lg font-semibold text-gray-800 dark:text-gray-200">
+      <header class="bg-white dark:bg-gray-800 shadow-md py-4">
+        <div class="px-6 flex justify-between items-center">
+          <div class="text-xl font-semibold text-gray-800 dark:text-white">
             Dashboard Overview
           </div>
           <div class="relative">
             <button
               @click="showingDropdown = !showingDropdown"
-              class="bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-lg font-semibold py-2 px-4 rounded-md hover:bg-gray-300 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-yellow-400 transition duration-150 ease-in-out"
+              class="bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-white px-4 py-2 rounded-md shadow-sm hover:bg-gray-200 dark:hover:bg-gray-600 transition"
             >
               {{ $page.props.auth.user.name }}
             </button>
             <div
               v-show="showingDropdown"
-              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg rounded-lg overflow-hidden z-50"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg rounded-md z-50"
             >
               <Link
                 href="/profile"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                class="block px-4 py-2 text-sm hover:bg-blue-100 dark:hover:bg-gray-600"
               >
                 Profile
               </Link>
@@ -69,7 +71,7 @@ const showingDropdown = ref(false);
                 :href="route('logout')"
                 method="post"
                 as="button"
-                class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-600"
+                class="block px-4 py-2 text-sm hover:bg-blue-100 dark:hover:bg-gray-600"
               >
                 Log Out
               </ResponsiveNavLink>
@@ -79,12 +81,9 @@ const showingDropdown = ref(false);
       </header>
 
       <!-- Page Content -->
-      <main style=" font-family: 'Merriweather', 'SolaimanLipi', sans-serif" class="px-6 sm:px-8 lg:px-10 py-8">
+      <main style="font-family: 'SolaimanLipi', sans-serif;" class="px-6 sm:px-8 lg:px-10 py-8 bg-gray-50 dark:bg-gray-800 rounded-md">
         <slot />
       </main>
     </div>
   </div>
 </template>
-
-
-
