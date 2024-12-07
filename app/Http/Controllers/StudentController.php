@@ -108,10 +108,10 @@ class StudentController extends Controller
             'Father' => 'required|string',
             'DateofBirth' => 'required|date',
             'st_en_name' => 'required|string', // Updated validation rule
-            // 'FatherEnglish' => 'required|string',
-            // 'BirthRegistrationNo' => 'required|string',
-            // 'MobileNo' => 'required|string',
-            // 'AlternativeMobile' => 'nullable|string'
+            'st_en_Fname' => 'required|string',
+            'BirthRegistrationNo_nid_no' => 'required|string',
+            'mobileNumber' => 'required|string',
+            'MadrashaNameEn' => 'nullable|string'
         ]);
 
         $student = students_number_potrro::where([

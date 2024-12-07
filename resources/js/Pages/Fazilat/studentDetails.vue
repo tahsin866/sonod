@@ -6,6 +6,8 @@ import PrimaryButton from "@/Components/PrimaryButton.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
 
+
+
 const props = defineProps({
     Roll: { type: [String, Number], required: true },
     reg_id: { type: [String, Number], required: true },
@@ -19,22 +21,16 @@ const form = ref({
     st_en_name: '',
     DateofBirth: '',
     st_en_Fname: '',
-    // FatherEnglish: '',
-    // BirthRegistrationNo: '',
-    // MobileNo: '',
-    // AlternativeMobile: '',
+    mobileNumber: '',
+    MadrashaNameEn: '',
     Nationality: '',
-    // Division: '',
-    // SubValue_1: '',
-    // SubValue_2: '',
-    // SubValue_3: '',
-    // SubValue_4: '',
-    // SubValue_5: '',
-    // SubValue_6: '',
-    // SubValue_7: '',
-    // SubValue_8: '',
-    // Total: '',
+    BirthRegistrationNo_nid_no: '',
+    Madrasha: '',
+    Class: '',
+    Roll: '',
+    reg_id: ''
 });
+
 
 const student = ref({
   SubValue_1: '',
@@ -49,32 +45,10 @@ const student = ref({
   Division: ''
 });
 
-
-
-// Add this missing method for edit modal
-const openEditModal = () => {
-  showModal.value = true;
-};
-
-
-
 // UI state
 const isSubmitting = ref(false);
 const showModal = ref(false);
-const isDropdownOpen = ref(false);
 const isDropdownOpen1 = ref(false);
-
-// Checkboxes state
-const checkboxes = ref([
-    { label: 'বাংলা মার্কশীট', checked: false },
-    { label: 'আরবি মার্কশীট', checked: false },
-    { label: 'ইংরেজি মার্কশীট', checked: false },
-]);
-
-const checkboxes1 = ref([
-    { label: 'বাংলা-ইংরেজি', checked: false },
-    { label: 'আরবি-ইংরেজি', checked: false },
-]);
 
 // Subjects data
 const maleSubjects = [
@@ -120,6 +94,18 @@ const fetchStudentDetails = async () => {
         const response = await axios.get(`/api/student/${props.Roll}/${props.reg_id}/${props.SRType}`);
         if (response.data.data) {
             Object.assign(form.value, response.data.data);
+            student.value = {
+                SubValue_1: response.data.data.SubValue_1,
+                SubValue_2: response.data.data.SubValue_2,
+                SubValue_3: response.data.data.SubValue_3,
+                SubValue_4: response.data.data.SubValue_4,
+                SubValue_5: response.data.data.SubValue_5,
+                SubValue_6: response.data.data.SubValue_6,
+                SubValue_7: response.data.data.SubValue_7,
+                SubValue_8: response.data.data.SubValue_8,
+                Total: response.data.data.Total,
+                Division: response.data.data.Division
+            };
         }
     } catch (error) {
         console.error("Error fetching student details:", error);
@@ -130,28 +116,39 @@ const handleSubmit = async () => {
     if (isSubmitting.value || !validateForm.value.isValid) return;
 
     isSubmitting.value = true;
+
+    const formData = {
+        ...form.value,
+        Roll: props.Roll,
+        reg_id: props.reg_id,
+        SRType: props.SRType
+    };
+
     try {
-        const response = await axios.put(`/student/${props.Roll}/${props.reg_id}`, form.value);
+        const response = await axios.put(`/student/${props.Roll}/${props.reg_id}`, formData);
         if (response.data.success) {
             await fetchStudentDetails();
             showModal.value = false;
             alert('Student information updated successfully');
         }
     } catch (error) {
-        const errorMessage = error.response?.data?.message ||
-                           'An error occurred while processing your request';
+        console.log('Error details:', error.response?.data);
+        const errorMessage = error.response?.data?.message || 'An error occurred while processing your request';
         alert(errorMessage);
     } finally {
         isSubmitting.value = false;
     }
 };
+
+
 const toggleModal = () => {
     showModal.value = !showModal.value;
 };
 
-const toggleDropdown = () => {
-    isDropdownOpen.value = !isDropdownOpen.value;
+const openEditModal = () => {
+    showModal.value = true;
 };
+
 
 const toggleDropdown1 = () => {
     isDropdownOpen1.value = !isDropdownOpen1.value;
@@ -249,15 +246,15 @@ onMounted(() => {
           </tr>
           <tr class="border-b">
   <td class="px-6 py-4 text-lg font-semibold text-gray-600">জন্মনিবন্ধন/এনআইডি</td>
-  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.BirthRegistrationNo }}</td>
+  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.BirthRegistrationNo_nid_no }}</td>
 </tr>
 <tr class="border-b">
   <td class="px-6 py-4 text-lg font-semibold text-gray-600">মোবাইল নম্বর</td>
-  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.MobileNo }}</td>
+  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.mobileNumber }}</td>
 </tr>
 <tr class="border-b">
-  <td class="px-6 py-4 text-lg font-semibold text-gray-600">বিকল্প মোবাইল</td>
-  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.AlternativeMobile }}</td>
+  <td class="px-6 py-4 text-lg font-semibold text-gray-600">মাদরাসার নাম ইংরেজি</td>
+  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.MadrashaNameEn }}</td>
 </tr>
         </tbody>
       </table>
@@ -333,7 +330,9 @@ onMounted(() => {
           <td class="border px-4 py-3 text-center font-medium">{{ index + 1 }}</td>
           <td class="border px-4 py-3 text-center font-medium">{{ subject.name }}</td>
           <td class="border px-4 py-3 text-center font-medium">100</td>
-          <td class="border px-4 py-3 text-center font-medium">{{ student[`SubValue_${index + 1}`] }}</td>
+          <td class="border px-4 py-3 text-center font-medium">
+    {{ student[`SubValue_${index + 1}`] || 'N/A' }}
+</td>
           <td class="border px-4 py-3 text-center font-medium text-green-600">A+</td>
         </tr>
       </tbody>
@@ -436,7 +435,7 @@ onMounted(() => {
         <div class="space-y-3">
           <label class="block text-sm font-medium text-gray-700">জন্মনিবন্ধন নম্বর / এন আইডি নম্বর</label>
           <input
-            v-model="form.BirthRegistrationNo"
+            v-model="form.BirthRegistrationNo_nid_no"
             type="text"
             placeholder="Birth Registration/NID Number"
             class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
@@ -446,7 +445,7 @@ onMounted(() => {
         <div class="space-y-3">
           <label class="block text-sm font-medium text-gray-700">মোবাইল নম্বর</label>
           <input
-            v-model="form.MobileNo"
+            v-model="form.mobileNumber"
             type="text"
             placeholder="Mobile Number"
             class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
@@ -454,9 +453,9 @@ onMounted(() => {
         </div>
 
         <div class="space-y-3">
-          <label class="block text-sm font-medium text-gray-700">বিকল্প মোবাইল নম্বর</label>
+          <label class="block text-sm font-medium text-gray-700">মাদরাসার নাম ইংরেজি</label>
           <input
-            v-model="form.AlternativeMobile"
+            v-model="form.MadrashaNameEn"
             type="text"
             placeholder="Alternative Mobile Number"
             class="w-full p-3 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:border-gray-500 focus:ring-2 focus:ring-gray-500 focus:outline-none transition"
