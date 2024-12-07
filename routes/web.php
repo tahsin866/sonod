@@ -31,6 +31,11 @@ Route::get('/Fazilat.studentDetails' , function () {
 })->middleware(['auth', 'verified'])->name('studentDetails');
 
 Route::get('/fazilat/student/{Roll}/{reg_id}/{SRType}', [StudentController::class, 'details'])->name('studentDetails');
+Route::get('/fazilat/student/{Roll}/{reg_id}/{SRType}/pdf', [StudentController::class, 'generatePDF'])
+    ->name('student.studentPdf')
+    ->middleware('auth');
+
+
 
 
 // Route::get('/fazilat/student/{Roll}/{reg_id}', [StudentController::class, 'details'])->name('studentDetails');

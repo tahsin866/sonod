@@ -5,6 +5,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import DangerButton from "@/Components/DangerButton.vue";
 import DropdownLink from "@/Components/DropdownLink.vue";
+// import PDF_fazilat from "./PDF_fazilat.vue";
 
 
 
@@ -48,7 +49,7 @@ const student = ref({
 // UI state
 const isSubmitting = ref(false);
 const showModal = ref(false);
-const isDropdownOpen1 = ref(false);
+
 
 // Subjects data
 const maleSubjects = [
@@ -141,6 +142,52 @@ const handleSubmit = async () => {
 };
 
 
+// pdf
+
+const generatePdf = async () => {
+    try {
+        console.log('Generating PDF for:', {
+            Roll: form.value.Roll,
+            reg_id: form.value.reg_id,
+            SRType: form.value.SRType
+        });
+
+        const response = await axios.get(
+            `/fazilat/student/${form.value.Roll}/${form.value.reg_id}/${form.value.SRType}/pdf`,
+            {
+                responseType: 'blob',
+                headers: {
+                    'Accept': 'application/pdf',
+                    'Content-Type': 'application/pdf'
+                }
+            }
+        );
+
+        if (response.data instanceof Blob) {
+            const blob = new Blob([response.data], { type: 'application/pdf' });
+            const url = window.URL.createObjectURL(blob);
+            window.open(url, '_blank');
+        } else {
+            console.error('Response is not a blob:', response);
+        }
+    } catch (error) {
+        console.error('PDF Generation Error:', error);
+        if (error.response) {
+            console.error('Error Response:', await error.response.data.text());
+        }
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
 const toggleModal = () => {
     showModal.value = !showModal.value;
 };
@@ -150,9 +197,13 @@ const openEditModal = () => {
 };
 
 
-const toggleDropdown1 = () => {
-    isDropdownOpen1.value = !isDropdownOpen1.value;
-};
+// pdf
+
+// const generatePdf = () => {
+//     const url = `/fazilat/student/${props.roll}/${props.regId}/${props.srType}/pdf`;
+//     window.open(url, '_blank');
+// };
+
 
 // Lifecycle hooks
 onMounted(() => {
@@ -164,7 +215,7 @@ onMounted(() => {
 <template>
   <AuthenticatedLayout>
     <a :href="route('Fazilat')" class="inline-block">
-      <PrimaryButton class="mx-14">
+      <PrimaryButton class="mx-10">
         BACK
       </PrimaryButton>
     </a>
@@ -185,79 +236,69 @@ onMounted(() => {
 
         <!-- Right Button (Dropdown) -->
         <div class="relative">
-            <PrimaryButton @click="toggleDropdown1" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none inline-flex items-center text-lg">
-  সনদের ধরণ
-  <svg class="w-4 h-4 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6" aria-hidden="true">
-    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1l4 4 4-4" />
-  </svg>
-</PrimaryButton>
+
 
           <!-- Dropdown Menu -->
-          <div v-if="isDropdownOpen1" class="absolute top-0 right-0 mt-12 w-56 bg-white divide-y divide-gray-100 rounded-lg shadow-md z-10">
-            <ul class="p-4 space-y-3 text-sm text-gray-700">
-              <li v-for="(item, index) in checkboxes1" :key="index">
-                <div class="flex items-center">
-                  <input type="checkbox" :id="'checkbox-item-' + index" v-model="item.checked" class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500" />
-                  <label :for="'checkbox-item-' + index" class="ml-2 text-gray-800">{{ item.label }}</label>
-                </div>
-              </li>
-            </ul>
-          </div>
+          <button @click="generatePdf"
+                class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700">
+            Print PDF
+        </button>
         </div>
       </div>
 
-      <table class="min-w-full table-auto border-collapse border border-gray-300 rounded-lg shadow-md">
-        <tbody>
-          <tr class="border-b bg-gray-50">
-            <td class="px-6 py-4 text-lg font-semibold text-gray-600">নাম (বাংলা)</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Name }}</td>
-          </tr>
-          <tr class="border-b bg-gray-50">
-    <td class="px-6 py-4 text-lg font-semibold text-gray-600">নাম (ইংরেজি)</td>
-    <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.st_en_name }}</td>
-</tr>
-          <tr class="border-b">
-            <td class="px-6 py-4 text-lg font-semibold text-gray-600">পিতার নাম (বাংলা)</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Father }}</td>
-          </tr>
-          <tr class="border-b bg-gray-50">
-    <td class="px-6 py-4 text-lg font-semibold text-gray-600">পিতার নাম (ইংরেজি)</td>
-    <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.st_en_Fname }}</td>
-</tr>
-          <tr class="border-b bg-gray-50">
-            <td class="px-6 py-4 text-lg font-semibold text-gray-600">মাদরাসার নাম</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Madrasha }}</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-6 py-4 text-lg font-semibold text-gray-600">শ্রেণী</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Class }}</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-6 py-4 text-lg font-semibold text-gray-600">রোল নম্বর</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Roll }}</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-6 py-4 text-lg font-semibold text-gray-600">রেজিস্ট্রেশন নম্বর</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.reg_id }}</td>
-          </tr>
-          <tr class="border-b">
-            <td class="px-6 py-4 text-lg font-semibold text-gray-600">জন্মতারিখ</td>
-            <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.DateofBirth }}</td>
-          </tr>
-          <tr class="border-b">
-  <td class="px-6 py-4 text-lg font-semibold text-gray-600">জন্মনিবন্ধন/এনআইডি</td>
-  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.BirthRegistrationNo_nid_no }}</td>
-</tr>
-<tr class="border-b">
-  <td class="px-6 py-4 text-lg font-semibold text-gray-600">মোবাইল নম্বর</td>
-  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.mobileNumber }}</td>
-</tr>
-<tr class="border-b">
-  <td class="px-6 py-4 text-lg font-semibold text-gray-600">মাদরাসার নাম ইংরেজি</td>
-  <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.MadrashaNameEn }}</td>
-</tr>
-        </tbody>
-      </table>
+      <table class="min-w-full table-auto rounded-lg shadow-md">
+  <tbody>
+    <tr class="bg-gray-50">
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">নাম (বাংলা)</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Name }}</td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">নাম (ইংরেজি)</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.st_en_name }}</td>
+    </tr>
+    <tr class="bg-gray-50">
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">পিতার নাম (বাংলা)</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Father }}</td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">পিতার নাম (ইংরেজি)</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.st_en_Fname }}</td>
+    </tr>
+    <tr class="bg-gray-50">
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">মাদরাসার নাম</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Madrasha }}</td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">শ্রেণী</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Class }}</td>
+    </tr>
+    <tr class="bg-gray-50">
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">রোল নম্বর</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.Roll }}</td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">রেজিস্ট্রেশন নম্বর</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.reg_id }}</td>
+    </tr>
+    <tr class="bg-gray-50">
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">জন্মতারিখ</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.DateofBirth }}</td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">জন্মনিবন্ধন/এনআইডি</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.BirthRegistrationNo_nid_no }}</td>
+    </tr>
+    <tr class="bg-gray-50">
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">মোবাইল নম্বর</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.mobileNumber }}</td>
+    </tr>
+    <tr>
+      <td class="px-6 py-4 text-lg font-semibold text-gray-600">মাদরাসার নাম ইংরেজি</td>
+      <td class="px-6 py-4 text-xl font-medium text-gray-800">{{ form.MadrashaNameEn }}</td>
+    </tr>
+  </tbody>
+</table>
+
     </div>
   </div>
 
@@ -270,27 +311,9 @@ onMounted(() => {
         <i class="fas fa-table mr-2"></i> মার্কশীট
       </h3>
       <div class="relative">
-        <button
-          @click="toggleDropdown"
-          class="text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 inline-flex items-center"
-        >
-          মার্কশীটের ধরণ
-          <svg
-            class="w-4 h-4 ml-2"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 10 6"
-            aria-hidden="true"
-          >
-            <path
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M1 1l4 4 4-4"
-            />
-          </svg>
-        </button>
+<PrimaryButton>
+    print
+</PrimaryButton>
 
         <!-- Dropdown Menu -->
         <div
@@ -315,37 +338,42 @@ onMounted(() => {
     </div>
 
     <!-- Table Section -->
-    <table class="w-full border border-gray-300 rounded-lg overflow-hidden shadow">
-      <thead class="bg-blue-100">
+    <table class="w-full border-collapse rounded-lg shadow-md overflow-hidden">
+      <thead class="bg-blue-600 text-white">
         <tr>
-          <th class="px-4 py-3 text-center font-semibold text-gray-700">ক্রামিক</th>
-          <th class="px-4 py-3 text-center font-semibold text-gray-700">বিষয়</th>
-          <th class="px-4 py-3 text-center font-semibold text-gray-700">পূর্ণ নম্বর</th>
-          <th class="px-4 py-3 text-center font-semibold text-gray-700">প্রাপ্ত নম্বর</th>
-          <th class="px-4 py-3 text-center font-semibold text-gray-700">প্রাপ্ত বিভাগ</th>
+          <th class="px-4 py-3 text-center font-semibold">ক্রামিক</th>
+          <th class="px-4 py-3 text-center font-semibold">বিষয়</th>
+          <th class="px-4 py-3 text-center font-semibold">পূর্ণ নম্বর</th>
+          <th class="px-4 py-3 text-center font-semibold">প্রাপ্ত নম্বর</th>
+          <th class="px-4 py-3 text-center font-semibold">প্রাপ্ত বিভাগ</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(subject, index) in currentSubjects" :key="index" class="bg-white hover:bg-gray-50">
-          <td class="border px-4 py-3 text-center font-medium">{{ index + 1 }}</td>
-          <td class="border px-4 py-3 text-center font-medium">{{ subject.name }}</td>
-          <td class="border px-4 py-3 text-center font-medium">100</td>
-          <td class="border px-4 py-3 text-center font-medium">
-    {{ student[`SubValue_${index + 1}`] || 'N/A' }}
-</td>
-          <td class="border px-4 py-3 text-center font-medium text-green-600">A+</td>
+        <tr
+          v-for="(subject, index) in currentSubjects"
+          :key="index"
+          class="bg-white hover:bg-gray-50"
+        >
+          <td class="px-4 py-3 text-center font-medium">{{ index + 1 }}</td>
+          <td style="font-size: 20px;" class="px-4 py-3 text-center font-medium">{{ subject.name }}</td>
+          <td class="px-4 py-3 text-center font-medium">100</td>
+          <td class="px-4 py-3 text-center font-medium">
+            {{ student[`SubValue_${index + 1}`] || 'N/A' }}
+          </td>
+
         </tr>
       </tbody>
-      <tfoot class="bg-gray-100">
+      <tfoot class="bg-gray-200">
         <tr>
-          <td colspan="3" class="border px-4 py-3 font-bold text-right">মোট</td>
-          <td class="border px-4 py-3 text-center font-bold">{{ student.Total }}</td>
-          <td class="border px-4 py-3 text-center font-bold">{{ student.Division }}</td>
+          <td colspan="3" class="px-4 py-3 font-bold text-right">মোট</td>
+          <td class="px-4 py-3 text-center font-bold">{{ student.Total }}</td>
+          <td class="px-4 py-3 text-center font-bold">{{ student.Division }}</td>
         </tr>
       </tfoot>
     </table>
   </div>
 </div>
+
 
     <div class="relative inline-block text-left">
 
@@ -487,9 +515,37 @@ onMounted(() => {
 
 
 
+<!-- pdf -->
+<!--
+
+<div>
+        <PDF_fazilat
+            :roll="student.Roll"
+            :reg-id="student.reg_id"
+            :sr-type="student.SRType"
+        />
+    </div> -->
 
 
 
 </template>
 
 
+<style scoped>
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.table, th, td {
+    border: 1px solid #ddd;
+}
+th, td {
+    text-align: left;
+    padding: 8px;
+}
+th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+</style>

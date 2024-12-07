@@ -13,6 +13,7 @@ Route::get('/user', function (Request $request) {
 
 Route::put('/student/{Roll}/{reg_id}', [StudentController::class, 'update']);
 Route::get('/student/{Roll}/{reg_id}/{SRType}', [StudentController::class, 'getStudentDetails']);
+Route::get('/fazilat/student/{Roll}/{reg_id}/{SRType}/pdf', [StudentController::class, 'generatePDF']);
 
 Route::get('/search', [StudentController::class, 'search']);
 Route::get('/filter-options', [StudentController::class, 'getFilterOptions']);

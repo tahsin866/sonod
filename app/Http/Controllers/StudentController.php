@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Models\students_number_potrro;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
+
 
 class StudentController extends Controller
 {
@@ -138,6 +141,51 @@ class StudentController extends Controller
         ]);
     }
 
+
+    public function generatePDF($Roll, $reg_id, $SRType)
+    {
+        try {
+            // Enable debug logging
+            \Log::info('Starting PDF generation', [
+                'Roll' => $Roll,
+                'reg_id' => $reg_id,
+                'SRType' => $SRType
+            ]);
+
+            $student = students_number_potrro::where([
+                'Roll' => $Roll,
+                'reg_id' => $reg_id,
+                'SRType' => $SRType
+            ])->first();
+
+            if (!$student) {
+                \Log::error('Student not found');
+                return response()->json(['error' => 'Student not found'], 404);
+            }
+
+            // Verify template exists
+            $view = 'pdf.studentPdf';
+            if (!view()->exists($view)) {
+                \Log::error('PDF template not found', ['view' => $view]);
+                return response()->json(['error' => 'PDF template not found'], 500);
+            }
+
+            // Generate PDF with error catching
+            $pdf = PDF::loadView($view, ['student' => $student]);
+
+            // Set paper size and orientation if needed
+            $pdf->setPaper('A4', 'portrait');
+
+            return $pdf->stream('student-details.pdf');
+
+        } catch (\Exception $e) {
+            \Log::error('PDF Generation failed', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
 
     }
 

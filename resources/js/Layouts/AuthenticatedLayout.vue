@@ -8,8 +8,13 @@ const showingUserDropdown = ref(false);
 
 const dropdownItems = [
   { label: 'ফযিলত', href: '/Fazilat.Fazilat' },
-  { label: 'সানাবিয়া উলইয়া', href: '/Fazilat.sana' }
+  { label: 'সানাবিয়া উলইয়া', href: '/Fazilat.sana' },
+  { label: 'মুতাওয়াস্সিতা', href: '' },
+  { label: 'ইবতেদাইয়্যাহ', href: '' },
+  { label: 'হিফজুল কোরান', href: '' },
+  { label: 'ইলমুল ক্বিরআত ', href: '' },
 ]
+
 </script>
 
 <template>
@@ -49,7 +54,7 @@ const dropdownItems = [
           <div class="relative">
             <button
               @click="showingDropdown = !showingDropdown"
-              class="w-full flex items-center justify-between py-3 px-4 rounded-lg hover:bg-white/10 transition-all duration-200 group"
+           style="font-size: 15px;"   class="w-full flex items-center justify-between py-3 px-4 rounded-lg hover:bg-white/10 transition-all duration-200 group"
               :class="{ 'bg-white/10': showingDropdown }"
             >
               <div class="flex items-center gap-3">
@@ -84,7 +89,7 @@ const dropdownItems = [
                   class="flex items-center gap-2 py-2.5 px-4 rounded-lg hover:bg-white/10 transition-all duration-200 group"
                 >
                   <div class="w-1.5 h-1.5 rounded-full bg-gray-400 group-hover:bg-white transition-colors"></div>
-                  <span class="font-medium text-sm text-gray-300 group-hover:text-white transition-colors">
+                  <span class="font-medium text-md text-gray-300 group-hover:text-white transition-colors">
                     {{ item.label }}
                   </span>
                 </Link>
