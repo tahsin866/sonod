@@ -25,8 +25,8 @@ const submit = () => {
         <Head title="Create Account - Befaqul Madarisil Arabia Bangladesh" />
 
         <!-- Full-Width Background Container -->
-        <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-gray-50 py-12 px-4 sm:px-6 lg:px-8 w-full">
-            <div class="max-w-md mx-auto">
+
+
                 <!-- Header Section -->
                 <div class="text-center mb-8">
                     <h2 class="text-3xl font-bold text-gray-900">Create Account</h2>
@@ -141,8 +141,8 @@ const submit = () => {
                         </div>
                     </form>
                 </div>
-            </div>
-        </div>
+
+
     </GuestLayout>
 </template>
 

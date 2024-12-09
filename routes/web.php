@@ -52,6 +52,8 @@ Route::get('/Fazilat.sana' , function () {
 
 
 // routes/web.php
+Route::get('Fazilat/generate-pdf/{Roll}/{reg_id}/{SRType}', [StudentController::class, 'generatePdf']);
+
 
 Route::put('/student/{Roll}/{reg_id}', [StudentController::class, 'update']);
 // Route::get('students/search', [StudentController::class, 'search']);

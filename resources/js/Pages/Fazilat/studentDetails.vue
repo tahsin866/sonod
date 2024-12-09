@@ -2,9 +2,7 @@
 import { ref, onMounted, computed } from "vue";
 import axios from "axios";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import PrimaryButton from "@/Components/PrimaryButton.vue";
-import DangerButton from "@/Components/DangerButton.vue";
-import DropdownLink from "@/Components/DropdownLink.vue";
+import html2pdf from 'html2pdf.js';
 // import PDF_fazilat from "./PDF_fazilat.vue";
 import { Link } from "@inertiajs/vue3";
 
@@ -143,43 +141,46 @@ const handleSubmit = async () => {
 
 
 // pdf
-
 const generatePdf = async () => {
     try {
-        console.log('Generating PDF for:', {
-            Roll: form.value.Roll,
-            reg_id: form.value.reg_id,
-            SRType: form.value.SRType
-        });
-
         const response = await axios.get(
-            `/fazilat/student/${form.value.Roll}/${form.value.reg_id}/${form.value.SRType}/pdf`,
+            `/api/Fazilat/generate-pdf/${props.Roll}/${props.reg_id}/${props.SRType}`,
             {
                 responseType: 'blob',
                 headers: {
-                    'Accept': 'application/pdf',
-                    'Content-Type': 'application/pdf'
+                    'Accept': 'application/pdf'
                 }
             }
         );
 
-        if (response.data instanceof Blob) {
-            const blob = new Blob([response.data], { type: 'application/pdf' });
-            const url = window.URL.createObjectURL(blob);
-            window.open(url, '_blank');
-        } else {
-            console.error('Response is not a blob:', response);
+        // Check if response is JSON (error message)
+        const contentType = response.headers['content-type'];
+        if (contentType && contentType.includes('application/json')) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const errorData = JSON.parse(reader.result);
+                console.error('Server Error:', errorData);
+                alert(errorData.message || 'Error generating PDF');
+            };
+            reader.readAsText(response.data);
+            return;
         }
+
+        const url = window.URL.createObjectURL(new Blob([response.data], { type: 'application/pdf' }));
+        const link = document.createElement('a');
+        link.href = url;
+        link.setAttribute('download', 'generate-pdf.pdf');
+        document.body.appendChild(link);
+        link.click();
+
+        // Cleanup
+        window.URL.revokeObjectURL(url);
+        link.remove();
     } catch (error) {
-        console.error('PDF Generation Error:', error);
-        if (error.response) {
-            console.error('Error Response:', await error.response.data.text());
-        }
+        console.error('Error generating PDF:', error.response?.data || error);
+        alert('Failed to generate PDF. Please try again.');
     }
 };
-
-
-
 
 
 
@@ -196,13 +197,6 @@ const openEditModal = () => {
     showModal.value = true;
 };
 
-
-// pdf
-
-// const generatePdf = () => {
-//     const url = `/fazilat/student/${props.roll}/${props.regId}/${props.srType}/pdf`;
-//     window.open(url, '_blank');
-// };
 
 
 // Lifecycle hooks
